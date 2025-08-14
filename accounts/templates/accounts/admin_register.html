@@ -1,0 +1,120 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Admin Registration{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+
+      <!-- Logo + Title -->
+      <div class="text-center mb-3">
+        <img src="{% static 'image/logo.png' %}" alt="Forever Fest" class="auth-logo">
+      </div>
+      <h2 class="text-center fw-bold mb-1">Admin Registration</h2>
+      <p class="text-center text-muted mb-4">Create an admin account and your college record</p>
+
+      {# Flash messages #}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- ADMIN DETAILS -->
+        <h4 class="text-muted mb-2">Admin Details</h4>
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.full_name.id_for_label }}">Full name</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}<div class="invalid-feedback d-block">{{ form.full_name.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.admin_name.id_for_label }}">Admin username</label>
+            {{ form.admin_name }}
+            {% if form.admin_name.errors %}<div class="invalid-feedback d-block">{{ form.admin_name.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.contact_no.id_for_label }}">Contact no</label>
+            {{ form.contact_no }}
+            {% if form.contact_no.errors %}<div class="invalid-feedback d-block">{{ form.contact_no.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
+            {{ form.gender }}
+            {% if form.gender.errors %}<div class="invalid-feedback d-block">{{ form.gender.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+            {% if form.password.errors %}<div class="invalid-feedback d-block">{{ form.password.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- COLLEGE DETAILS -->
+        <h4 class="text-muted mb-2">College Details</h4>
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label" for="{{ form.college_name.id_for_label }}">College name</label>
+            {{ form.college_name }}
+            {% if form.college_name.errors %}<div class="invalid-feedback d-block">{{ form.college_name.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label" for="{{ form.college_contact_no.id_for_label }}">College contact no</label>
+            {{ form.college_contact_no }}
+            {% if form.college_contact_no.errors %}<div class="invalid-feedback d-block">{{ form.college_contact_no.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.college_email.id_for_label }}">College email</label>
+            {{ form.college_email }}
+            {% if form.college_email.errors %}<div class="invalid-feedback d-block">{{ form.college_email.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.college_location.id_for_label }}">Location</label>
+            {{ form.college_location }}
+            {% if form.college_location.errors %}<div class="invalid-feedback d-block">{{ form.college_location.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+
+        <!-- Terms & Login -->
+        <div class="form-check mt-4">
+          <input class="form-check-input" type="checkbox" id="terms" required>
+          <label class="form-check-label" for="terms">
+            I agree to the <a href="#">Terms & Conditions</a>
+          </label>
+        </div>
+        <br> <br>
+        <button type="submit" class="btn btn-primary w-100 auth-submit mt-3">Register</button>
+
+        <p class="text-center mt-3 mb-0">
+          Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

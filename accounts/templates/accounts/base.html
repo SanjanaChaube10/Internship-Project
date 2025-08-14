@@ -1,0 +1,106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <!-- already in your base, but double-check it’s present and after the HTML -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Forever Fest{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <header class="navbar">
+        <div class="left-section">
+            <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <!-- Overlay -->
+            <div id="overlay" class="overlay" onclick="closeMenu()"></div>
+            <img src="{% static 'image/logo.png' %}" alt="Logo" />
+            <div class="site-title"><h1>Forever Fest</h1></div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="">Events</a>
+            <a href="">About Us</a>
+            <a href="">Contact</a>
+        </nav>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search..." />
+            <button><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="right-section">
+            <div class="nav-buttons">
+                <a href="{% url 'login' %}" class="btn login">Login</a>
+                <a href="{% url 'admin_login' %}" class="btn admin">Admin</a>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Side Menu -->
+    <nav class="side-menu" id="sideMenu">
+        <a href="{% url 'admin_login' %}">Admin Login</a>
+        <a href="{% url 'login' %}">User Login</a>
+        <a href="">Sponsorship</a>
+        <a href="">Insights/Analytics</a>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+ function toggleMenu() {
+  const menu = document.getElementById("sideMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function openMenu() {
+    document.getElementById("sideMenu").style.left = "0";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeMenu() {
+    document.getElementById("sideMenu").style.left = "-250px";
+    document.getElementById("overlay").style.display = "none";
+}
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const group = document.querySelector('.btn-group');
+    if (!group) return;
+
+    const [userBtn, adminBtn] = group.querySelectorAll('.btn');
+
+    const setActive = (active) => {
+      [userBtn, adminBtn].forEach(b => b.classList.remove('active', 'btn-primary'));
+      [userBtn, adminBtn].forEach(b => b.classList.add('btn-light'));
+      active.classList.remove('btn-light');
+      active.classList.add('btn-primary', 'active');
+    };
+
+    userBtn?.addEventListener('click', () => setActive(userBtn));
+    adminBtn?.addEventListener('click', () => setActive(adminBtn));
+  });
+</script>
+
+<script>
+  document.querySelector('.subscribe-form')?.addEventListener('submit', function (e) {
+    const email = this.querySelector('input[type="email"]');
+    if (!email.value || !email.checkValidity()) {
+      e.preventDefault();
+      email.focus();
+    }
+  });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!-- templates/accountsapp/signup.html -->
+
+{# templates/accounts/signup.html #}
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+
+      <!-- Logo -->
+      <div class="text-center mb-3">
+        <img src="{% static 'image/logo.png' %}" alt="Forever Fest" class="auth-logo">
+      </div>
+
+      <!-- Title + Subtitle -->
+      <h2 class="text-center fw-bold mb-1">Create New Account</h2>
+      <p class="text-center text-muted mb-4">Join our platform with enhanced security</p>
+
+      {# Flash messages #}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="row g-3">
+          <!-- Username -->
+          <div class="col-12">
+            <label class="form-label">Username</label>
+            <input
+              type="text"
+              name="username"
+              class="form-control auth-input{% if form.username.errors %} is-invalid{% endif %}"
+              value="{{ form.username.value|default:'' }}"
+              autocomplete="username"
+              required>
+            {% if form.username.errors %}
+              <div class="invalid-feedback d-block">{{ form.username.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- First / Last name -->
+          <div class="col-md-6">
+            <label class="form-label">First Name</label>
+            <input
+              type="text"
+              name="first_name"
+              class="form-control auth-input{% if form.first_name.errors %} is-invalid{% endif %}"
+              value="{{ form.first_name.value|default:'' }}"
+              autocomplete="given-name">
+            {% if form.first_name.errors %}
+              <div class="invalid-feedback d-block">{{ form.first_name.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Last Name</label>
+            <input
+              type="text"
+              name="last_name"
+              class="form-control auth-input{% if form.last_name.errors %} is-invalid{% endif %}"
+              value="{{ form.last_name.value|default:'' }}"
+              autocomplete="family-name">
+            {% if form.last_name.errors %}
+              <div class="invalid-feedback d-block">{{ form.last_name.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Email -->
+          <div class="col-12">
+            <label class="form-label">Email Address</label>
+            <input
+              type="email"
+              name="email"
+              class="form-control auth-input{% if form.email.errors %} is-invalid{% endif %}"
+              value="{{ form.email.value|default:'' }}"
+              autocomplete="email"
+              required>
+            {% if form.email.errors %}
+              <div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Passwords -->
+          <div class="col-12">
+            <label class="form-label">Password</label>
+            <input
+              type="password"
+              name="password1"
+              class="form-control auth-input{% if form.password1.errors %} is-invalid{% endif %}"
+              autocomplete="new-password"
+              required>
+            {% if form.password1.errors %}
+              <div class="invalid-feedback d-block">{{ form.password1.errors.0 }}</div>
+            {% else %}
+              <small class="text-muted">Must be at least 8 characters.</small>
+            {% endif %}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              name="password2"
+              class="form-control auth-input{% if form.password2.errors %} is-invalid{% endif %}"
+              autocomplete="new-password"
+              required>
+            {% if form.password2.errors %}
+              <div class="invalid-feedback d-block">{{ form.password2.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Terms -->
+          <div class="col-12 d-flex align-items-center small text-muted">
+            <input class="form-check-input me-2" type="checkbox" id="agree" required>
+            <label for="agree" class="mb-0">
+              I agree to the <a href="#" class="text-decoration-none">terms and conditions</a>
+            </label>
+          </div>
+          <!-- CTA -->
+           &nbsp; &nbsp; &nbsp; &nbsp;
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary w-100 auth-submit">Create Account</button>
+          </div>
+        </div>
+      </form>
+
+      <p class="text-center mt-3">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

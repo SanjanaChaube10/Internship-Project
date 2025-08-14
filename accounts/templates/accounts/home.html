@@ -1,0 +1,221 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Home • Forever Fest{% endblock %}
+
+{% block content %}
+
+  <!-- Hero -->
+  <section class="hero-section"
+           style="background-image:url('{% static 'image/logo1.png' %}');">
+    <div class="hero-overlay">
+      <h1>Welcome To Forever Fest</h1>
+      <p>Mumbai’s Premier College Event Platform</p>
+      <a href="#" class="explore-btn">Explore Events</a>
+    </div>
+  </section>
+
+  <!-- Partner Colleges -->
+  <section class="partner-colleges">
+    <h2>Partnered Colleges</h2>
+    <div class="college-logos">
+      <img src="{% static 'image/tspdcclg.png' %}" alt="College 1" />
+      <img src="{% static 'image/xavier.png' %}" alt="College 2" />
+      <img src="{% static 'image/tsdcclg.png' %}" alt="College 3" />
+      <img src="{% static 'image/mumbaiuniversity.png' %}" alt="College 4" />
+      <img src="{% static 'image/d.g.ruparel.png' %}" alt="College 5" />
+      <img src="{% static 'image/tsdcclg.png' %}" alt="College 6" />
+      <img src="{% static 'image/jaihind.png' %}" alt="College 7" />
+      <img src="{% static 'image/tsdcemclg.png' %}" alt="College 8" />
+      <img src="{% static 'image/wilson.png' %}" alt="College 9" />
+    </div>
+  </section>
+
+  <!-- Upcoming Events -->
+  <section class="upcoming-events">
+    <h1>Upcoming Events</h1>
+    <p>Join these exciting events happening soon across Mumbai colleges</p>
+
+    <div class="event-cards">
+      <!-- Event 1 -->
+      <div class="event-card">
+        <img src="{% static 'image/kshijit.png' %}" alt="Goonj 2025-26" />
+        <h2>Kshijit 2025-26</h2>
+        <p><h5>24 - 25 Jan 2025</h5></p>
+        <b>Mithibai College</b>
+        <p class="desc"><h6>
+          It is an international intercollegiate cultural festival, considered one of the biggest college festivals in Asia.</h6>
+        </p>
+      </div>
+
+      <!-- Event 2 -->
+      <div class="event-card">
+        <img src="{% static 'image/fiesta.png' %}" alt="Fiesta 2025-26" />
+        <h2>Fiesta 2025-26</h2>
+        <p><h5>18 - 20 Jan 2025</h5></p>
+        <b>Thakur Polytechnic</b>
+        <p class="desc"><h6>
+          This event is an extraordinary gathering that brings together business
+          development...</h6>
+        </p>
+      </div>
+
+      <!-- Event 3 -->
+      <div class="event-card">
+        <img src="{% static 'image/malhar2.png' %}" alt="Malhar 2025-26" />
+        <h2>Malhar 2025-26</h2>
+        <p><h5>24 - 28 Aug 2025</h5></p>
+        <b>St. Xavier's College</b>
+        <p class="desc"><h6>
+          Malhar features a diverse range of events, including cultural contests in literary, performing arts, and fine arts categories, along with various workshops.</h6>
+        </p>
+      </div>
+
+      <!-- Event 4 -->
+      <div class="event-card">
+        <img src="{% static 'image/nm techfest.png' %}" alt="Fiesta 2025-26" />
+        <h2>NM TechFest 2025-26</h2>
+        <p><h5>18 - 24 Nov 2025</h5></p>
+        <b>NMIMS Mumbai</b>
+        <p class="desc"><h6>
+          NM TechFest refers to the FinTech and Gaming Festival organized by Narsee Monjee College of Commerce and Economics in Mumbai.</h6>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="why-choose">
+  <h3>Why Choose Us</h3>
+  <p class="why-subtitle"><strong>We bring the best college events from across Mumbai to one platform</strong></p>
+
+  <div class="features">
+    <!-- Card 1 -->
+    <div class="feature-card">
+      <h4 class="feature-title">Comprehensive<br>Listings</h4>
+      <div class="feature-icon">
+        <!-- You can swap this emoji for an SVG or <img> -->
+        <span><svg xmlns="http://www.w3.org/2000/svg" width="60" height="50" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+        </svg></span>
+      </div>
+      <p class="feature-desc">
+        Events from <strong>50+ premier colleges</strong> across Mumbai, all in one place.
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="feature-card">
+      <h4 class="feature-title">Early<br>Notifications</h4>
+      <div class="feature-icon">
+        <span><svg xmlns="http://www.w3.org/2000/svg" width="60" height="50" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+        </svg></span>
+      </div>
+      <p class="feature-desc">
+        Get alerts <strong>before registration opens</strong>.
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="feature-card">
+      <h4 class="feature-title">Easy<br>Registration</h4>
+      <div class="feature-icon">
+        <span><svg xmlns="http://www.w3.org/2000/svg" width="60" height="50" fill="currentColor" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
+        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
+        </svg></span>
+      </div>
+      <p class="feature-desc">
+        One-click,<strong>smooth signup</strong> process.
+      </p>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="feature-card">
+      <h4 class="feature-title">Community<br>Building</h4>
+      <div class="feature-icon">
+        <span><svg xmlns="http://www.w3.org/2000/svg" width="60" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+        </svg></span>
+      </div>
+      <p class="feature-desc">
+        Connect with students who share your interests.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- ===== Subscribe band ===== -->
+<section class="subscribe-band">
+  <div class="container-narrow">
+    <h2 class="subscribe-title">
+      JOIN OUR FEST, LIVE YOUR BEST.
+      <br />
+      CULTURE.
+    </h2>
+
+    <p class="subscribe-sub">
+      Stay up-to-date with new college events, early registrations, sponsors & limited-seat workshops.
+    </p>
+
+    <form class="subscribe-form" method="post" action="#">
+      {% csrf_token %}
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email address"
+        required
+        aria-label="Email address"
+      />
+      <button type="submit" class="btn-subscribe">Subscribe Now </button>
+    </form>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-social">
+      <a href="#" aria-label="Instagram">
+        <img src="{% static 'image/insta.png' %}" alt="Instagram" />
+      </a>
+      <a href="#" aria-label="Facebook">
+        <img src="{% static 'image/facebook.png' %}" alt="Facebook" />
+      </a>
+      <a href="#" aria-label="Twitter / X">
+        <img src="{% static 'image/twitter.png' %}" alt="Twitter" />
+      </a>
+      <a href="#" aria-label="LinkedIn">
+        <img src="{% static 'image/linkedin.png' %}" alt="LinkedIn" />
+      </a>
+    </div>
+
+    <nav class="footer-nav">
+      <a href="{% url 'home' %}">Home</a>
+      <a href="#">Events</a>
+      <a href="#">Story</a>
+      <a href="#">Guides</a>
+      <a href="#">Locations</a>
+    </nav>
+
+    <div class="footer-subnav">
+      <a href="#">Contact</a>
+      <a href="#">Partners</a>
+      <a href="#">Support</a>
+    </div>
+  </div>
+
+  <!-- thin green strip -->
+  <div class="footer-claim">
+    COLLEGE FESTS, CRAFTED WITH
+    <span class="heart" aria-hidden="true">❤</span>
+    IN MUMBAI
+  </div>
+
+  <div class="footer-copy">
+    ©{% now "Y" %} Forever Fest • All rights reserved
+  </div>
+</footer>
+
+
+{% endblock %}

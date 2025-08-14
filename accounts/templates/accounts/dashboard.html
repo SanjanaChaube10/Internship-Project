@@ -1,0 +1,10 @@
+<!-- templates/accountsapp/dashboard.html -->
+{% extends "accounts/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h2>Dashboard</h2>
+    <p>Welcome back, <strong>{{ user.username }}</strong>!</p>
+    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+</div>
+{% endblock %}

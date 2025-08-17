@@ -1,0 +1,154 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Campus Sponsorship Hub • Forever Fest{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="sponsorship-section">
+  <!-- Hero / Intro -->
+  <div class="intro">
+    <h1>Campus Sponsorship Hub</h1>
+    <p class="intro-sub"><strong>Connecting sponsors with academic initiatives through transparent investment tracking</strong></p>
+    <a href="#become-sponsor" class="cta-btn">Become a Sponsor Today</a>
+  </div>
+
+  <!-- Tiers -->
+  <h3 class="section-title">Sponsorship Tiers</h3>
+  <div class="tiers">
+    <div class="tier-box bronze">
+      <h2>Bronze Tier</h2>
+      <h5><strong>₹5,000</strong> per event</h5>
+      <ul>
+        <li>Logo on event materials</li>
+        <li>1 social media mention</li>
+        <li>Recognition at opening ceremony</li>
+      </ul>
+      <button class="select-btn">Select Tier</button>
+    </div>
+
+    <div class="tier-box silver">
+      <h2>Silver Tier</h2>
+      <h5><strong>₹8,000</strong> per event</h5>
+      <ul>
+        <li>All Bronze benefits</li>
+        <li>3 social media mentions</li>
+        <li>5 event tickets</li>
+        <li>30 sec speaking opportunity</li>
+      </ul>
+      <button class="select-btn">Select Tier</button>
+    </div>
+
+    <div class="tier-box gold">
+      <h2>Gold Tier</h2>
+      <h5><strong>₹12,000</strong> per event</h5>
+      <ul>
+        <li>All Silver benefits</li>
+        <li>Premium branding</li>
+        <li>Backstage access (2)</li>
+        <li>VIP seating (4)</li>
+      </ul>
+      <button class="select-btn">Select Tier</button>
+    </div>
+
+    <div class="tier-box platinum">
+      <h2>Platinum Tier</h2>
+      <h5><strong>₹19,000</strong> per event</h5>
+      <ul>
+        <li>All Gold benefits</li>
+        <li>Stage time during event</li>
+        <li>Press coverage + Media mentions</li>
+        <li>8 event tickets</li>
+      </ul>
+      <button class="select-btn">Select Tier</button>
+    </div>
+
+    <div class="tier-box diamond">
+      <h2>Diamond Tier</h2>
+      <h5><strong>₹25,000</strong> per event</h5>
+      <ul>
+        <li>All Platinum benefits</li>
+        <li>Booth space at venue</li>
+        <li>Logo on merchandise</li>
+        <li>Dedicated social media post</li>
+      </ul>
+      <button class="select-btn">Select Tier</button>
+    </div>
+
+    <div class="tier-box partner">
+      <h2>Knowledge Partner</h2>
+      <h5><strong>Value Exchange</strong></h5>
+      <ul>
+        <li>Speaker opportunity</li>
+        <li>Panel participation</li>
+        <li>Branding on academic content</li>
+      </ul>
+      <button class="select-btn">Collaborate</button>
+    </div>
+
+    <div class="tier-box title">
+      <h2>Title Sponsor</h2>
+      <h5><strong>₹50,000+</strong></h5>
+      <ul>
+        <li>Event named after sponsor</li>
+        <li>Top branding everywhere</li>
+        <li>Prime stage time + Video interview</li>
+        <li>Custom partnership perks</li>
+      </ul>
+      <button class="select-btn">Become Title Sponsor</button>
+    </div>
+  </div>
+
+  <!-- Featured Sponsors -->
+  <h2 class="section-title">Our Featured Sponsors</h2>
+  <p class="sponsor-subtext"><strong>Trusted by leading organizations in our community</strong></p>
+
+  <div class="sponsor-cards">
+    {% for s in sponsors %}
+      <div class="sponsor-card">
+        <!-- If you add a logo field later, swap this placeholder -->
+        <img src="{% static 'image/sponsor-placeholder.jpg' %}" alt="{{ s.sponsor_name }} logo">
+        <h2>{{ s.sponsor_name }}</h2>
+
+        <div class="sponsor-details">
+          <p>
+            <strong>Contact:</strong>
+            {% if s.email %}{{ s.email }}{% endif %}
+            {% if s.phone %} • {{ s.phone }}{% endif %}
+          </p>
+
+          <p>
+            <strong>Events sponsored:</strong>
+            {{ s.event_sponsors.all|length }}
+          </p>
+
+          {% if s.event_sponsors.all %}
+            <ul class="sponsored-list">
+              {# show up to 3 recent links #}
+              {% for es in s.event_sponsors.all|slice:":3" %}
+                <li>
+                  <span class="event-title">{{ es.event.title }}</span>
+                  {% if es.event.college %}<span class="sep"> • </span><span class="college">{{ es.event.college.name }}</span>{% endif %}
+                  {% if es.amount %}<span class="amount"> • ₹{{ es.amount }}</span>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <p>No sponsors listed yet. Be the first to partner with us!</p>
+    {% endfor %}
+  </div>
+
+  <!-- Become a sponsor (anchor for CTA) -->
+  <div id="become-sponsor" class="become-sponsor">
+    <h3>Become a Sponsor</h3>
+    <p>Interested in supporting college fests across Mumbai? Reach out and we’ll get back within 24 hours.</p>
+    <a href="" class="cta-btn">Contact Us</a>
+  </div>
+</section>
+{% endblock %}

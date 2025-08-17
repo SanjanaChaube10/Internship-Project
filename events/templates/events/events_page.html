@@ -1,0 +1,33 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<div class="events-container">
+  <h1 class="page-title">All College Events</h1>
+  <p class="subtitle"><strong>Explore Tech Fests, Cultural Shows, Workshops, Seminars & More</strong></p><br> <br>
+
+  <div class="events-grid">
+    {% for e in events %}
+      <div class="event-card">
+        <div class="event-image">
+          {% if e.image_url %}
+            <img src="{{ e.image_url }}" alt="{{ e.title }}">
+          {% else %}
+            <img src="https://via.placeholder.com/400x200.png?text=Event+Image" alt="{{ e.title }}">
+          {% endif %}
+        </div>
+        <div class="event-details">
+          <h3>{{ e.title }}</h3>
+          <p class="college">{{ e.college_name }}</p>
+          <p class="datetime">{{ e.date_time|date:"M d, Y, g:i A" }}</p>
+          <p class="location">{{ e.location }}</p>
+          <span class="tag">{{ e.tag }}</span>
+          <p class="description">{{ e.description }}</p>
+          <div class="actions">
+            <a href="#" class="btn-register">Register</a>
+            <a href="#" class="btn-details">Details</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

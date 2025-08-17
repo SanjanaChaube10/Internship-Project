@@ -1,0 +1,39 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}College Events Portal • Forever Fest{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/colleges.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div id="colleges-page" class="page active">
+  <header class="portal-header">
+    <h1>College Events Portal</h1>
+    <p class="subtitle">Select a college to view upcoming events</p>
+  </header>
+
+  <div class="cta-row">
+    <a href="{% url 'events:events_page' %}" class="back-button">All College Events →</a>
+  </div>
+
+  <div class="grid-container">
+    {% for col in colleges %}
+      <a class="college-card" href="{{ col.href }}">
+        <div class="college-logo">
+          <img src="{{ col.logo }}" alt="{{ col.name }} logo">
+        </div>
+        <h2 class="college-name">{{ col.name }}</h2>
+        <p class="college-location">{{ col.location }}</p>
+      </a>
+    {% empty %}
+      <p>No colleges found.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- subscribe band + footer are already in your base OR keep your own partials -->
+
+{% endblock %}

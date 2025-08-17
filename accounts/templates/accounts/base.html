@@ -16,24 +16,37 @@
 <body>
     <header class="navbar">
         <div class="left-section">
-            <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-            <!-- Overlay -->
-            <div id="overlay" class="overlay" onclick="closeMenu()"></div>
+            <!-- menu trigger (inside your header left-section) -->
+            <div class="menu-icon" id="menuTrigger">&#9776;</div>
+
+            <!-- side drawer -->
+            <nav class="side-menu" id="sideMenu" aria-hidden="true">
+                <a href="{% url 'admin_login' %}">Admin Login</a>
+                <a href="{% url 'login' %}">User Login</a>
+                <a href="{% url 'events:sponsorship_hub' %}">Sponsorship</a>
+                <a href="#">Insights / Analytics</a>
+            </nav>
+            <div id="overlay" class="overlay" hidden></div> 
+            
             <img src="{% static 'image/logo.png' %}" alt="Logo" />
             <div class="site-title"><h1>Forever Fest</h1></div>
+
         </div>
 
         <nav class="nav-links">
             <a href="{% url 'home' %}">Home</a>
-            <a href="">Events</a>
+            <a href="{% url 'colleges:college_event_portal' %}">Events</a>
             <a href="">About Us</a>
             <a href="">Contact</a>
         </nav>
 
-        <div class="search-bar">
-            <input type="text" placeholder="Search..." />
-            <button><i class="fas fa-search"></i></button>
-        </div>
+          <form class="search-bar" method="get" action="" id="searchForm" autocomplete="off">
+          <input type="text" name="q" id="searchInput" placeholder="Search colleges…" >
+          <button type="submit" aria-label="Search">
+          <i class="fas fa-search"></i>
+          </button>
+          <div class="search-suggest" id="searchSuggest" hidden></div>
+          </form>
 
         <div class="right-section">
             <div class="nav-buttons">
@@ -43,33 +56,51 @@
         </div>
     </header>
 
-
-    <!-- Side Menu -->
-    <nav class="side-menu" id="sideMenu">
-        <a href="{% url 'admin_login' %}">Admin Login</a>
-        <a href="{% url 'login' %}">User Login</a>
-        <a href="">Sponsorship</a>
-        <a href="">Insights/Analytics</a>
-    </nav>
+<!-- Overlay -->
+  <div id="overlay" class="overlay" hidden></div>
 
     {% block content %}{% endblock %}
 
     <script src="{% static 'js/main.js' %}"></script>
-    <script>
- function toggleMenu() {
-  const menu = document.getElementById("sideMenu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
+   <script>
+document.addEventListener('DOMContentLoaded', function(){
+  const drawer  = document.getElementById('sideMenu');
+  const overlay = document.getElementById('overlay');
+  const trigger = document.getElementById('menuTrigger');
 
-function openMenu() {
-    document.getElementById("sideMenu").style.left = "0";
-    document.getElementById("overlay").style.display = "block";
-}
+  if (!drawer || !overlay || !trigger) {
+    console.warn('Side menu: required elements not found (sideMenu / overlay / menuTrigger).');
+    return;
+  }
 
-function closeMenu() {
-    document.getElementById("sideMenu").style.left = "-250px";
-    document.getElementById("overlay").style.display = "none";
-}
+  function openMenu(){
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden','false');
+    overlay.hidden = false;
+    requestAnimationFrame(()=> overlay.classList.add('show'));
+  }
+  function closeMenu(){
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true');
+    overlay.classList.remove('show');
+    setTimeout(()=>{ overlay.hidden = true; }, 250);
+  }
+  function toggleMenu(){
+    drawer.classList.contains('open') ? closeMenu() : openMenu();
+  }
+
+  // open/close handlers
+  trigger.addEventListener('click', toggleMenu);
+  overlay.addEventListener('click', closeMenu);
+
+  // ESC to close
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape' && drawer.classList.contains('open')) closeMenu();
+  });
+
+  // close when a link is clicked
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+});
 </script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -100,7 +131,27 @@ function closeMenu() {
   });
 </script>
 
-
+  <script>
+    function hideAllPages() {
+      document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'fade-in');
+      });
+    }
+    function showEvents(id) {
+      hideAllPages();
+      const el = document.getElementById(id);
+      el.classList.add('active');
+      void el.offsetWidth; // restart animation
+      el.classList.add('fade-in');
+    }
+    function showColleges() {
+      hideAllPages();
+      const home = document.getElementById('colleges-page');
+      home.classList.add('active');
+      void home.offsetWidth;
+      home.classList.add('fade-in');
+    }
+  </script>
 
 </body>
 </html>

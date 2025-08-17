@@ -169,3 +169,5 @@ def admin_logout(request):
 def home_view(request):
     return render(request, "accounts/home.html")  # this looks for templates/home.html
 
+
+

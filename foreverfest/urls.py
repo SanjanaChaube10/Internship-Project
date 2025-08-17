@@ -18,11 +18,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts.views import home_view  
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('', include('accounts.urls')),  
+    path("colleges/", include("colleges.urls",namespace="colleges")),
+    path("events/", include("events.urls", namespace="events")),
+
 ]
+
+
+
 
 # (DEV ONLY) serve static if DEBUG=True. Not needed if you used STATICFILES_DIRS + runserver,
 # but it’s fine to include:

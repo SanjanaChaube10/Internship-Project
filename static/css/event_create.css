@@ -1,0 +1,188 @@
+body{
+    background: #fbf8ff;
+}
+
+/* Card itself */
+.event-card {
+  max-width: 400px;
+  margin:60px auto;
+  background: #fff;
+  border: 1px solid #eee6ff;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(123,63,228,.12);
+  padding: 30px 28px;
+  justify-content: center;   /* horizontal center */
+  align-items: center; 
+  width: 100%;
+  height:600px;
+ 
+  
+ 
+   
+}
+
+/* Title – clean, not flashy */
+.event-title{
+  margin: 24px ;
+  font-weight: 800;
+  font-size: clamp(22px, 2.4vw, 28px);
+  color: #2b2240;
+  text-align: center;
+}
+
+
+/* Form fields */
+.event-card .form-label {
+  font-weight: 600;
+  color: #6a5a88;
+}
+
+
+
+.event-input:focus{
+  border-color: #9a6cff;
+  box-shadow: 0 0 0 3px rgba(154,108,255,.25);
+}
+
+
+/* Responsive: on small screens stack label above input */
+@media (max-width: 600px){
+  .ev-form-grid{
+    grid-template-columns: 1fr;
+  }
+  .ev-form-grid > label{
+    text-align: left;
+  }
+}
+
+/* Two-column label+field layout */
+.event-form-grid{
+  display: grid;
+  grid-template-columns: 160px 1fr; /* label column + field column */
+  gap: 16px 18px;
+  align-items: center;
+}
+
+/* Labels aligned in one line */
+.event-form-grid > label{
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  color: #584c7d;
+}
+
+/* Inputs look consistent with your site; still use Bootstrap classes */
+.event-input{
+  border-radius: 10px;
+  border: 1px solid #d9d3f0;
+  box-shadow: none;
+  padding: 10px 12px;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.event-input:focus{
+  border-color: #9a6cff;
+  box-shadow: 0 0 0 3px rgba(154,108,255,.25);
+}
+
+/* Actions row spans both columns and is centered */
+.event-actions{
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+/* Keep buttons “normal” (Bootstrap look) but slightly rounded to match) */
+.btn{
+  border-radius: 999px;
+  padding: 8px 22px;
+  font-weight: 600;
+}
+
+/* Responsive: on small screens stack label above input */
+@media (max-width: 600px){
+  .ev-form-grid{
+    grid-template-columns: 1fr;
+  }
+  .ev-form-grid > label{
+    text-align: left;
+}
+}
+
+/* Center card */
+.event-card {
+  max-width: 600px;
+  margin: 60px auto;       /* centers horizontally */
+  padding: 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+.event-card h2 {
+  text-align: center;
+  margin-bottom: 28px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #4a2c82;
+}
+
+/* Each field group */
+.event-card .form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;   /* ⬅ label goes on top */
+}
+
+/* Labels */
+.event-card label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs & textarea */
+.event-card input,
+.event-card textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: 0.2s ease-in-out;
+}
+
+.event-card input:focus,
+.event-card textarea:focus {
+  border-color: #7b3fe4;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(123, 63, 228, 0.15);
+}
+
+/* Buttons row */
+.event-card .btn-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.event-card .btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.event-card .btn-primary {
+  background: linear-gradient(180deg, #9a6cff, #7b3fe4);
+  color: #fff;
+  align-items: center;
+}
+
+.event-card .btn-secondary {
+  background: #eee;
+  color: #333;
+  align-items: center;
+}

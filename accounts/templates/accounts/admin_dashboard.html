@@ -1,17 +1,17 @@
 {% extends "accounts/base.html" %}
 {% load static %}
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %} Admin Dashboard{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
-{% endblock %}
+
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+
 <section class="ad-wrap">
   <div class="container">
 
     <header class="ad-header">
-      <h1 class="ad-title">Admin Dashboard</h1>
+      <h1 class="ad-title"> &nbsp; &nbsp; &nbsp; &nbsp;Admin Dashboard</h1>
     </header>
 
     <div class="ad-grid">
@@ -29,7 +29,7 @@
         <div class="ad-lines">
           <div><span class="k">Admin Name:</span> <span class="v">{{ admin.admin_name }}</span></div>
           <div><span class="k">Contact No.:</span> <span class="v">{{ admin.contact_no|default:"—" }}</span></div>
-          <div><span class="k">Email:</span> <span class="v">{{ admin.email }}</span></div>
+          <div><span class="k">Email:</span> <span class="v">{{ admin.email }}</span></div> 
 
           {% if college %}
             <div class="ad-divider"></div>

@@ -212,6 +212,34 @@ body {
   margin-bottom: 20px;
 }
 
+
+/* Side drawer */
+.side-menu{
+  position: fixed; top: 0; left: -280px; height: 100vh; width: 260px;
+  background: #ffffff; box-shadow: 2px 0 16px rgba(0,0,0,.12);
+  padding: 16px; z-index: 1100; overflow-y: auto; transition: left .25s ease;
+  border-right: 1px solid #eee;
+}
+.side-menu.open{ left: 0; }
+.side-menu a{ display:block; padding:10px 8px; margin:4px 0; border-radius:10px; text-decoration:none; color:#222; }
+.side-menu a:hover{ background:#f4f1ff; color:#6b21a8; }
+.side-menu .side-title{ font-weight:700; color:#6b21a8; margin:6px 0 10px; }
+.side-menu hr{ border:none; border-top:1px solid #eee; margin:10px 0; }
+.logout-link{ color:#b91c1c; }
+
+/* Overlay */
+.overlay{
+  position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  z-index: 1000;
+}
+
+/* Trigger button */
+.menu-icon{
+  background: none; border: 0; font-size: 24px; cursor: pointer; padding: 8px 10px; color:#1f2937;
+}
+
+
+
 .explore-btn {
   text-decoration: none;
   background-color: white;
@@ -1166,7 +1194,15 @@ a.small:hover {
 .auth-logo{ width:56px; height:auto; }
 
 /* Form elements */
-.auth-input{ border-radius:10px; height:46px; }
+.auth-input {
+  display: block;
+  width: 100%;
+  height: 46px;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  background-color: #fff;border-radius:10px; height:46px; }
 /* Center the button's text and prevent wrapping/vertical writing */
 .auth-submit{
   display: inline-flex;             /* inline so centering works nicely */

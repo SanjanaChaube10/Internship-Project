@@ -1,6 +1,7 @@
 # accounts/urls.py
 from django.urls import path
 from . import views
+from .views import dashboard_view, profile_edit_view
 
 urlpatterns = [
     # User auth
@@ -15,4 +16,8 @@ urlpatterns = [
     path('admin-login/', views.admin_login, name='admin_login'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('admin-logout/', views.admin_logout, name='admin_logout'),
-]
+
+
+    path("dashboard/", dashboard_view, name="dashboard"),
+    path("profile/edit/", profile_edit_view, name="profile_edit"),
+] 

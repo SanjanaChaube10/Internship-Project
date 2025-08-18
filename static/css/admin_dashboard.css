@@ -1,0 +1,211 @@
+/* ========== Admin Dashboard (stunning) ========== */
+
+/* Page background + base type */
+:root{
+  --bg: #fbf8ff;              /* off-white with a lilac tint */
+  --card: #ffffff;
+  --ink: #2b2240;             /* deep purple text */
+  --muted: #7a6d99;
+  --brand-1: #7b3fe4;         /* primary purple */
+  --brand-2: #9a6cff;         /* lighter purple */
+  --accent: #e9ddff;          /* soft outline */
+  --ring: rgba(123,63,228,.25);
+  --shadow: 0 8px 24px rgba(34, 18, 51, .08), 0 1px 0 rgba(34, 18, 51, .04);
+  --radius-xl: 20px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+body{
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Wrapper */
+.ad-wrap{
+  padding: 28px 0 56px;
+}
+
+/* Header row */
+.ad-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:24px;
+}
+
+.ad-title{
+  margin:0;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 800;
+  letter-spacing:.3px;
+}
+
+/* Buttons */
+.ad-btn{
+  appearance:none;
+  border:0;
+  background: linear-gradient(180deg, var(--brand-2), var(--brand-1));
+  color:#fff;
+  font-weight:700;
+  padding:10px 16px;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.ad-btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px rgba(34,18,51,.14); }
+.ad-btn:active{ transform: translateY(0); box-shadow: var(--shadow); }
+
+.ad-btn.sm{ padding:8px 12px; font-size: 14px; }
+
+.ad-btn-outline{
+  background: transparent;
+  color: var(--brand-1);
+  border: 2px solid var(--brand-1);
+}
+.ad-btn-outline:hover{
+  background: linear-gradient(180deg, #f4edff, #efe6ff);
+  transform:none;
+}
+
+/* Grid */
+.ad-grid{
+  display:grid;
+  grid-template-columns: 1.1fr .6fr .6fr .6fr .6fr;
+  gap: 18px;
+}
+@media (max-width: 1200px){
+  .ad-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px){
+  .ad-grid{ grid-template-columns: 1fr; }
+}
+
+/* Card base */
+.ad-card{
+  background:
+    linear-gradient(180deg, #ffffffcc, #fffffffa) padding-box,
+    radial-gradient(100% 100% at 0% 0%, #efe9ff, #ffffff) border-box;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  padding: 18px 18px 16px;
+}
+
+/* Profile card spans full row on wide screens */
+.ad-card--profile{
+  grid-column: 1 / span 5;
+}
+@media (max-width: 1200px){
+  .ad-card--profile{ grid-column: 1 / -1; }
+}
+
+/* Card head */
+.ad-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.ad-head-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.ad-avatar{
+  width:56px; height:56px;
+  border-radius:50%;
+  object-fit:cover;
+  border: 3px solid #fff;
+  box-shadow: 0 6px 14px rgba(34,18,51,.12);
+}
+
+.ad-card-title{
+  margin:0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.ad-sub{
+  font-size: 13px;
+  color: var(--muted);
+}
+.ad-id{
+  font-weight:700; color: var(--brand-1);
+}
+
+/* Profile fields */
+.ad-lines{
+  display:grid;
+  gap:8px;
+  padding: 6px 4px 2px;
+}
+.ad-lines .k{
+  display:inline-block;
+  min-width: 150px;
+  color: var(--muted);
+  font-weight:700;
+}
+.ad-lines .v{ color: var(--ink); }
+
+/* Metric cards */
+.ad-metric{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding: 18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.ad-metric::after{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(120% 120% at 110% -10%, rgba(123,63,228,.10), transparent 50%),
+              radial-gradient(120% 120% at -10% 110%, rgba(154,108,255,.10), transparent 50%);
+  pointer-events:none;
+}
+
+.ad-metric-icon{
+  flex:0 0 auto;
+  width:48px; height:48px;
+  border-radius: 14px;
+  display:grid; place-items:center;
+  font-size:22px;
+  background: linear-gradient(180deg, #f1e8ff, #e9ddff);
+  color: var(--brand-1);
+  box-shadow: inset 0 0 0 2px #f3ecff, 0 6px 14px rgba(34,18,51,.10);
+}
+
+.ad-metric-body{
+  display:flex; flex-direction:column;
+  gap:4px;
+}
+.ad-metric-label{
+  font-size: 12px; letter-spacing:.4px;
+  color: var(--muted); text-transform: uppercase;
+}
+.ad-metric-value{
+  font-size: 26px; font-weight: 900;
+}
+
+/* Utilities */
+.ad-muted{ color: var(--muted); }
+
+/* Container width helper if not already present */
+.container{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Reduce Bootstrap modal focus ring clashes */
+:focus-visible{
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 8px;
+}

@@ -1,26 +1,85 @@
 {% extends "accounts/base.html" %}
+{% load static %}
 {% block title %}Admin Dashboard{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-  <h2 class="mb-3">Welcome, {{ admin.full_name }} ({{ admin.admin_id }})</h2>
+<section class="ad-wrap">
+  <div class="container">
 
-  {% if college %}
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">{{ college.name }}</h5>
-        <p class="mb-1"><strong>College ID:</strong> {{ college.college_id }}</p>
-        <p class="mb-1"><strong>Contact:</strong> {{ college.contact_no }}</p>
-        <p class="mb-1"><strong>Email:</strong> {{ college.email }}</p>
-        <p class="mb-1"><strong>Location:</strong> {{ college.location }}</p>
-      </div>
+    <header class="ad-header">
+      <h1 class="ad-title">Admin Dashboard</h1>
+    </header>
+
+    <div class="ad-grid">
+      <!--  Admin Profile -->
+      <article class="ad-card ad-card--profile">
+        <div class="ad-card-head">
+          <div class="ad-head-left">
+            <img class="ad-avatar" src="{% static 'image/logo.png' %}" alt="avatar">
+            <div>
+              <h2 class="ad-card-title">Admin Profile</h2>
+              <div class="ad-sub">{{ admin.full_name }} <span class="ad-id">({{ admin.admin_id }})</span></div>
+            </div>
+          </div>
+
+        <div class="ad-lines">
+          <div><span class="k">Admin Name:</span> <span class="v">{{ admin.admin_name }}</span></div>
+          <div><span class="k">Contact No.:</span> <span class="v">{{ admin.contact_no|default:"—" }}</span></div>
+          <div><span class="k">Email:</span> <span class="v">{{ admin.email }}</span></div>
+
+          {% if college %}
+            <div class="ad-divider"></div>
+            <div><span class="k">College:</span> <span class="v">{{ college.name }}</span></div>
+            <div><span class="k">College ID:</span> <span class="v">{{ college.college_id }}</span></div>
+            <div><span class="k">College Contact:</span> <span class="v">{{ college.contact_no|default:"—" }}</span></div>
+            <div><span class="k">Location:</span> <span class="v">{{ college.location|default:"—" }}</span></div>
+          {% else %}
+            <div class="ad-muted">No college linked to this admin.</div>
+          {% endif %}
+        </div>
+      </article>
+
+      <!--  Total Events -->
+      <article class="ad-card ad-metric">
+        <div class="ad-metric-icon">🗓</div>
+        <div class="ad-metric-body">
+          <div class="ad-metric-label">Total Events</div>
+          <div class="ad-metric-value">{{ stats.total_events }}</div>
+        </div>
+      </article>
+
+      <!--  Total Registrations -->
+      <article class="ad-card ad-metric">
+        <div class="ad-metric-icon">✅</div>
+        <div class="ad-metric-body">
+          <div class="ad-metric-label">Total Registrations</div>
+          <div class="ad-metric-value">{{ stats.total_registrations }}</div>
+        </div>
+      </article>
+
+      <!--  Total Payments -->
+      <article class="ad-card ad-metric">
+        <div class="ad-metric-icon">₹</div>
+        <div class="ad-metric-body">
+          <div class="ad-metric-label">Total Payments</div>
+          <div class="ad-metric-value">₹ {{ stats.total_payments|floatformat:0 }}</div>
+        </div>
+      </article>
+
+      <!--  Sponsored Events -->
+      <article class="ad-card ad-metric">
+        <div class="ad-metric-icon">⭐</div>
+        <div class="ad-metric-body">
+          <div class="ad-metric-label">Sponsored Events</div>
+          <div class="ad-metric-value">{{ stats.total_sponsored }}</div>
+        </div>
+      </article>
     </div>
-  {% else %}
-    <div class="alert alert-warning mt-3">No college linked to this admin.</div>
-  {% endif %}
 
-  <div class="mt-3">
-    <a href="{% url 'admin_logout' %}" class="btn btn-outline-danger">Logout</a>
   </div>
-</div>
+</section>
 {% endblock %}

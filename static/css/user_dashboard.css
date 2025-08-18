@@ -1,0 +1,150 @@
+/* ===== PAGE / LAYOUT ===== */
+:root{
+  --ff-bg: #faf7fc;              /* off-white page bg */
+  --ff-card: #ffffff;            /* card bg */
+  --ff-border: #e7defb;          /* light purple border */
+  --ff-shadow: 0 12px 30px rgba(109, 54, 196, .12);
+  --ff-primary: #9b58ff;         /* primary purple */
+  --ff-primary-2: #7e3de1;
+  --ff-ink: #2f264d;             /* dark text */
+  --ff-ink-2: #5a4f77;           /* secondary text */
+  --ff-head: #3d2b80;            /* headings */
+  --ff-accent: #b990ff;          /* subtle accent */
+}
+
+html, body { background: var(--ff-bg); }
+.ud-wrap { padding: 36px 0 50px; }
+.container { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+
+.ud-page-title{
+  margin: 6px 0 24px;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 2vw, 2rem);
+  color: var(--ff-head);
+  letter-spacing: .2px;
+}
+
+/* Responsive 3-card grid */
+.ud-cards{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+@media (min-width: 900px){
+  .ud-cards{ grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ===== CARD ===== */
+.ud-card{
+  position: relative;
+  background: var(--ff-card);
+  border: 1px solid var(--ff-border);
+  border-radius: 18px;
+  box-shadow: var(--ff-shadow);
+  padding: 20px 20px 22px;
+  overflow: hidden;
+}
+
+/* subtle top gradient strip for brand feel */
+.ud-card::before{
+  content:"";
+  position:absolute; left:0; top:0; right:0; height:8px;
+  background: linear-gradient(90deg, var(--ff-primary), var(--ff-accent));
+  opacity:.25;
+}
+
+/* card header */
+.ud-card-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 14px;
+}
+.ud-head-left{ display:flex; align-items:center; gap:12px; }
+.ud-card-title{
+  margin:0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ff-head);
+}
+
+/* avatar */
+.ud-avatar{
+  width: 56px; height: 56px; border-radius: 50%;
+  object-fit: cover; background:#fff;
+  border: 2px solid #fff;
+  box-shadow: 0 8px 18px rgba(0,0,0,.10);
+}
+
+/* info lines inside card */
+.ud-lines{
+  display:grid;
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--ff-ink);
+  font-size: .98rem;
+}
+.ud-k{ font-weight: 700; color: var(--ff-head); margin-right: 6px; }
+.ud-v{ color: var(--ff-ink-2); }
+
+/* separator */
+.ud-sep{
+  border: 0;
+  border-top: 1px dashed var(--ff-border);
+  margin: 16px 0 14px;
+}
+
+/* ===== BUTTONS ===== */
+.ud-btn,
+.ud-btn-light{
+  appearance: none; border:0; cursor:pointer; user-select:none;
+  font-weight: 700; font-size: .92rem; line-height: 1;
+  padding: 10px 14px; border-radius: 10px;
+  transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+}
+.ud-btn{
+  color:#fff;
+  background: linear-gradient(90deg, var(--ff-primary), var(--ff-primary-2));
+  box-shadow: 0 6px 16px rgba(123, 58, 226, .25);
+}
+.ud-btn:hover{ filter: brightness(1.06); }
+.ud-btn:active{ transform: translateY(1px); }
+
+.ud-btn-light{
+  background:#f4eeff; color: var(--ff-primary-2);
+}
+
+/* ===== INLINE FORM (INSIDE THE CARD) ===== */
+.ud-edit-form{ display:none; margin-top: 6px; }
+.ud-field{ margin-bottom: 14px; }
+.ud-field label{
+  display:block; margin-bottom: 6px;
+  font-weight: 600; color: var(--ff-head);
+}
+.ud-input{
+  width:100%;
+  background:#fff;
+  border: 1px solid #d8ccfb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--ff-ink);
+  font: inherit;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.ud-input:focus{
+  outline: none;
+  border-color: var(--ff-primary);
+  box-shadow: 0 0 0 3px rgba(155,88,255,.18);
+}
+.ud-actions{ display:flex; gap:10px; }
+
+/* ===== LISTS IN OTHER CARDS ===== */
+.ud-list{
+  margin: 4px 0 0 18px;
+  padding: 0;
+  color: var(--ff-ink);
+}
+.ud-list li{ margin: 8px 0; }
+.ud-muted{ color:#8b82a6; }
+
+/* ===== SHOW THE FORM WHEN YOU SWITCH TO EDIT MODE ===== */
+/* If you’re using the small JS toggle from the template:
+   we simply ensure the form is full-width and looks part of the card. */

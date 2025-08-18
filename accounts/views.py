@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import  login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.http import require_http_methods
@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib import messages
 from .models import AdminProfile
+from functools import wraps
+from .models import UserProfile
 from colleges.models import College
 from .forms import UserSignUpForm, AdminRegisterForm, AdminLoginForm
 
@@ -20,42 +22,179 @@ def _make_college_id(name: str) -> str:
 def home_view(request):
     return render(request, "accounts/home.html")
 
-# ----------------- USER FLOWS (Django auth) -----------------
+from .forms import UserSignUpForm
+
+USER_SESSION_KEY = "user_id"   # session key for user login
+
+
+# ---------- USER SIGNUP ----------
 @require_http_methods(["GET", "POST"])
 def signup_view(request):
     if request.method == "POST":
         form = UserSignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()  # handles hashing, etc.
+            form.save()
             messages.success(request, "Account created! Please log in.")
-            return redirect("login")
+            return redirect("login")  # url name for user login
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = UserSignUpForm()
+
     return render(request, "accounts/signup.html", {"form": form})
 
+    # ---------- USER LOGIN ----------
 @require_http_methods(["GET", "POST"])
 def login_view(request):
     if request.method == "POST":
-        username = request.POST.get("username", "").strip()
-        password = request.POST.get("password", "")
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)  # Django session for user
-            request.session["user_id"] = user.id  # explicit (optional)
-            return redirect("dashboard")
-        messages.error(request, "Invalid username or password.")
+        username = (request.POST.get("username") or "").strip()
+        password = request.POST.get("password") or ""
+
+        if not username or not password:
+            messages.error(request, "Please enter both username and password.")
+            return redirect("login")
+
+        # ⚠ No get(); duplicates allowed
+        candidates = list(UserProfile.objects.filter(username__iexact=username))
+        if not candidates:
+            messages.error(request, "Username not found.")
+            return redirect("login")
+
+        matched = None
+        for u in candidates:
+            stored = u.password or ""
+            if stored.startswith("pbkdf2_"):
+                if check_password(password, stored):
+                    matched = u
+                    break
+            else:
+                # legacy/plain text row
+                if password == stored:
+                    # upgrade to hashed immediately
+                    u.password = make_password(password)
+                    u.save(update_fields=["password"])
+                    matched = u
+                    break
+
+        if not matched:
+            messages.error(request, "Invalid username or password.")
+            return redirect("login")
+# success: keep THAT user's id in session
+        request.session[USER_SESSION_KEY] = str(getattr(matched, "user_id", matched.pk))
+
+        # optional remember me
+        if request.POST.get("remember"):
+            request.session.set_expiry(60 * 60 * 24 * 14)  # 14 days
+        else:
+            request.session.set_expiry(0)
+
+        messages.success(request, f"Welcome, {matched.username}!")
+        return redirect("dashboard")
+
     return render(request, "accounts/login.html")
 
-@login_required
-def dashboard_view(request):
-    # You can add user-specific data here
-    return render(request, "accounts/dashboard.html", {"user": request.user})
+# ---------- USER DASHBOARD ----------
 
+USER_SESSION_KEY = "user_id"
+
+def _get_related_list(user, *names):
+    """
+    Try multiple relation names; return up to 5 items as a list.
+    Works for M2M/ForeignKey related managers (have .all()).
+    """
+    for name in names:
+        rel = getattr(user, name, None)
+        if rel is not None and hasattr(rel, "all"):
+            try:
+                qs = rel.all()
+                try:
+                    qs = qs.order_by("-id")
+                except Exception:
+                    pass
+                return list(qs[:5])
+            except Exception:
+                pass
+    return []
+
+def _event_dict(obj):
+    """Make a display dict: label + date_str (best-effort fields)."""
+    label = (
+        getattr(obj, "name", None)
+        or getattr(obj, "title", None)
+        or getattr(obj, "event_name", None)
+        or str(obj)
+    )
+    dt = (
+        getattr(obj, "date", None)
+        or getattr(obj, "event_date", None)
+        or getattr(obj, "start_time", None)
+        or None
+    )
+    if hasattr(dt, "strftime"):
+        date_str = dt.strftime("%b %d, %Y")
+    else:
+        date_str = ""
+    return {"label": label, "date_str": date_str}
+
+def _upload_dict(obj):
+    """Make a display dict for uploads/ugc."""
+    label = (
+        getattr(obj, "title", None)
+        or getattr(obj, "name", None)
+        or getattr(obj, "filename", None)
+        or str(obj)
+    )
+    meta = getattr(obj, "description", None) or getattr(obj, "caption", None) or ""
+    return {"label": label, "meta": meta}
+
+def dashboard_view(request):
+    uid = request.session.get(USER_SESSION_KEY)
+    if not uid:
+        return redirect("login")
+
+    user = UserProfile.objects.filter(pk=uid).first() or UserProfile.objects.filter(user_id=uid).first()
+    if not user:
+        messages.error(request, "Session invalid. Please log in again.")
+        return redirect("login")
+
+    # Try common relation names; fall back to empty lists
+    raw_regs = _get_related_list(user, "events_registered", "registrations", "registered_events")
+    raw_up = _get_related_list(user, "uploads", "ugc", "ugc_items")
+
+    registrations = [_event_dict(x) for x in raw_regs]
+    uploads = [_upload_dict(x) for x in raw_up]
+
+    ctx = {
+        "account_user": user,
+        "registrations": registrations,  # list of {"label","date_str"}
+        "uploads": uploads,              # list of {"label","meta"}
+    }
+    return render(request, "accounts/dashboard.html", ctx)
+
+@require_http_methods(["POST"])
+def profile_edit_view(request):
+    uid = request.session.get(USER_SESSION_KEY)
+    if not uid:
+        return redirect("login")
+
+    user = UserProfile.objects.filter(pk=uid).first() or UserProfile.objects.filter(user_id=uid).first()
+    if not user:
+        messages.error(request, "Session invalid. Please log in again.")
+        return redirect("login")
+
+    user.profile_info = (request.POST.get("profile_info") or "").strip() or None
+    user.preferences  = (request.POST.get("preferences")  or "").strip() or None
+    user.save(update_fields=["profile_info", "preferences"])
+
+    messages.success(request, "Profile updated.")
+    return redirect("dashboard")
+
+# ---------- USER LOGOUT ----------
 def logout_view(request):
-    # Logs out Django user (does not touch custom admin session)
-    logout(request)
+    request.session.pop(USER_SESSION_KEY, None)
     messages.success(request, "Logged out.")
-    return redirect("home")
+    return redirect("login")
+
 
 # ----------------- ADMIN FLOWS (custom AdminProfile) -----------------
 
@@ -143,7 +282,17 @@ def admin_login(request):
 
     return render(request, "accounts/admin_login.html")
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db.models import Sum
+
+from .models import AdminProfile
+from events.models import Event
+from registrations.models import Registration, Payment
+
+
 def admin_dashboard(request):
+    # session guard (same style as your admin_login)
     admin_id = request.session.get("admin_id")
     if not admin_id:
         return redirect("admin_login")
@@ -154,11 +303,33 @@ def admin_dashboard(request):
         messages.error(request, "Session invalid. Please log in again.")
         return redirect("admin_login")
 
+    # --- metrics (GLOBAL) ---
+    total_events = Event.objects.count()
+    total_registrations = Registration.objects.count()
+
+    # IMPORTANT: aggregate on real Payment fields (no registrations__… here)
+    total_payments = (
+        Payment.objects.aggregate(total=Sum("amount")).get("total") or 0
+    )
+
+    # If your Event has no 'is_sponsored' field, this will just be 0
+    try:
+        total_sponsored = Event.objects.filter(is_sponsored=True).count()
+    except Exception:
+        total_sponsored = 0
+
     context = {
         "admin": admin,
         "college": getattr(admin, "college", None),
+        "stats": {
+            "total_events": total_events,
+            "total_registrations": total_registrations,
+            "total_payments": total_payments,
+            "total_sponsored": total_sponsored,
+        },
     }
     return render(request, "accounts/admin_dashboard.html", context)
+                  
 
 def admin_logout(request):
     # only clear admin session key; does not affect user login

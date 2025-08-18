@@ -1,0 +1,86 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Register • {{ event.title }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+<section class="registration-section">
+  <div class="reg-header">
+    <h1>{{ event.title }}</h1>
+    <p>
+      Welcome! Register now for {{ event.title }} at
+      <b>{{ event.college.name|default:"the host college" }}</b>.
+    </p>
+    <div class="reg-img"></div>
+    <div class="reg-date">
+      <span class="calendar-icon">📅</span>
+      {% if event.date_time %}
+        {{ event.date_time|date:"M d, Y, g:i A" }}
+      {% else %}
+        Date TBA
+      {% endif %}
+      {% if event.location %} • {{ event.location }}{% endif %}
+    </div>
+  </div>
+
+  <div class="reg-details">
+    <h3>About this event</h3>
+    <p>{{ event.description|default:"Join students from across Mumbai for talks, workshops and competitions." }}</p>
+
+    <h4>Schedule (sample):</h4>
+    <ul class="schedule-list">
+      <li><b>Session 1:</b> 10:00–11:00 Keynote</li>
+      <li><b>Session 2:</b> 11:15–1:00 Workshops</li>
+      <li><b>Session 3:</b> 2:00–5:00 Competitions</li>
+    </ul>
+
+    <h4>Register</h4>
+    <form method="post" class="register-form">
+      {% csrf_token %}
+      <input type="text" name="full_name" value="{{ form.full_name.value|default_if_none:'' }}" placeholder="Full Name" required>
+      <input type="email" name="email" value="{{ form.email.value|default_if_none:'' }}" placeholder="Email address" required>
+      <input type="tel" name="phone" value="{{ form.phone.value|default_if_none:'' }}" placeholder="Phone Number">
+
+      <a href="#" class="rules-link" onclick="alert('Basic rules: be respectful, follow campus policy, no prohibited items.'); return false;">
+        Rules and Regulations
+      </a>
+
+      <h4>Payment Method</h4>
+      <div class="payment-method">
+        {% for choice in form.gateway.field.choices %}
+          <div>
+            <label>
+              <input type="radio" name="gateway" value="{{ choice.0 }}"
+                     {% if form.gateway.value == choice.0 or not form.gateway.value and forloop.first %}checked{% endif %}>
+              {{ choice.1 }}
+            </label>
+          </div>
+        {% endfor %}
+        <div>
+          <button class="add-method-btn" type="button" onclick="alert('Add new payment method UI TBD');">Add New Method</button>
+        </div>
+      </div>
+
+      <div class="debit-cards"></div>
+
+      <button class="register-btn" type="submit" name="save_only">Save Registration</button>
+      <button class="pay-btn" type="submit" name="pay_now">Pay Now ₹{{ amount }}</button>
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    <div>
+      <b>{{ event.title }}</b><br>
+      <a href="#">Privacy & Terms</a><br>
+      <a href="#">Contact us</a>
+    </div>
+    <div>
+      <button class="subscribe-btn" type="button">Subscribe Now</button>
+      <div><span>Stay in the loop</span></div>
+      <div class="social-icons">[Icons]</div>
+    </div>
+  </footer>
+</section>
+{% endblock %}

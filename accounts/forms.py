@@ -1,39 +1,53 @@
+# accounts/forms.py
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from .models import UserProfile
+from django.contrib.auth.hashers import make_password
 
-class UserSignUpForm(UserCreationForm):
-    first_name = forms.CharField(
-        max_length=30, required=True, widget=forms.TextInput(attrs={"class": "form-control"})
+
+class UserSignUpForm(forms.ModelForm):
+   
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"})
     )
-    last_name = forms.CharField(
-        max_length=30, required=True, widget=forms.TextInput(attrs={"class": "form-control"})
-    )
-    email = forms.EmailField(
-        required=True, widget=forms.EmailInput(attrs={"class": "form-control"})
+    password2 = forms.CharField(
+        label="Confirm Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"})
     )
     agree_to_terms = forms.BooleanField(
         required=True,
-        label='I agree to the terms and conditions',
+        label="I agree to the terms and conditions",
         widget=forms.CheckboxInput(attrs={"class": "form-check-input"})
     )
 
     class Meta:
-        model = User
-        fields = ("username", "first_name", "last_name", "email", "password1", "password2", "agree_to_terms")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({"class": "form-control"})
-        self.fields['password1'].widget.attrs.update({"class": "form-control"})
-        self.fields['password2'].widget.attrs.update({"class": "form-control"})
+        model = UserProfile
+        fields = ("username", "email")  
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control " , "placeholder" : "Enter a username"} ),
+            "email": forms.EmailInput(attrs={"class": "form-control " , "placeholder" : "Enter a email"}),
+        }
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower()
-        if User.objects.filter(email=email).exists():
+        if UserProfile.objects.filter(email=email).exists():
             raise forms.ValidationError("Email already in use.")
         return email
 
+    def clean(self):
+        cleaned = super().clean()
+        p1, p2 = cleaned.get("password1"), cleaned.get("password2")
+        if p1 and p2 and p1 != p2:
+            self.add_error("password2", "Passwords do not match.")
+        return cleaned
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = user.email.lower()
+        user.password= make_password(self.cleaned_data["password1"])  # hashes the password
+        if commit:
+            user.save()
+        return user
 
 
 GENDER_CHOICES = [
@@ -135,5 +149,4 @@ class AdminLoginForm(forms.Form):
     )
 
     def clean_admin_name(self):
-        # normalize spacing/case for lookup in the view
         return (self.cleaned_data["admin_name"] or "").strip()

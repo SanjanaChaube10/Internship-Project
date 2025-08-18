@@ -26,6 +26,9 @@ urlpatterns = [
     path('', include('accounts.urls')),  
     path("colleges/", include("colleges.urls",namespace="colleges")),
     path("events/", include("events.urls", namespace="events")),
+    path("", include(("registrations.urls","registrations"), namespace="registrations")),
+    path("ugc/", include("ugc.urls", namespace="ugc")),
+
 
 ]
 

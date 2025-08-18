@@ -1,0 +1,149 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Share & Review – {{ event.title }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/user_dashboard.css' %}">
+<style>
+  .ud-grid-2 { display:grid; gap:22px; grid-template-columns:1fr; }
+  @media(min-width:900px){ .ud-grid-2{ grid-template-columns:1fr 1fr; } }
+  .ud-note{ color:#8b82a6; font-size:.95rem; }
+  .ud-pill{ display:inline-block; padding:.2rem .55rem; border-radius:999px; background:#f1ecff; color:#5a2ca0; font-weight:700; font-size:.8rem; }
+  .ud-own{ background:#e9dbff; }
+  .ud-ugc-type{ font-weight:700; color:#5a2ca0; }
+  .ud-review-rating{ font-weight:700; color:#ff9800; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="ud-wrap">
+  <div class="container">
+    <h1 class="ud-page-title">Share & Review – {{ event.title }}</h1>
+
+    {% if messages %}
+      {% for m in messages %}
+        <div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Forms row -->
+    <div class="ud-grid-2">
+      <!-- UGC form -->
+      <article class="ud-card">
+        <div class="ud-card-head">
+          <h2 class="ud-card-title">Post UGC</h2>
+          <span class="ud-pill">Event: {{ event.event_id }}</span>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="intent" value="ugc">
+          <div class="ud-field">
+            <label>Content Type</label>
+            <select name="content_type" class="ud-input">
+              <option value="photo">Photo</option>
+              <option value="video">Video</option>
+              <option value="text">Text</option>
+            </select>
+          </div>
+          <div class="ud-field">
+            <label>Content Data (caption / link / text)</label>
+            <textarea name="content_data" rows="3" class="ud-input" placeholder="Say something about your post…"></textarea>
+          </div>
+          <div class="ud-field">
+            <label>Image URL (only if type = Photo)</label>
+            <input name="image_url" class="ud-input" placeholder="https://…">
+          </div>
+          <div class="ud-actions">
+            <button type="submit" class="ud-btn">Share</button>
+          </div>
+          <p class="ud-note">Photo: also creates a Photo row linked to this UGC.</p>
+        </form>
+      </article>
+
+      <!-- Review form -->
+      <article class="ud-card">
+        <div class="ud-card-head">
+          <h2 class="ud-card-title">Write a Review</h2>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="intent" value="review">
+          <div class="ud-field">
+            <label>Rating</label>
+            <select name="rating" class="ud-input">
+              <option value="5">5 - Loved it</option>
+              <option value="4">4 - Great</option>
+              <option value="3">3 - Good</option>
+              <option value="2">2 - Okay</option>
+              <option value="1">1 - Meh</option>
+              <option value="0">0 - No rating</option>
+            </select>
+          </div>
+          <div class="ud-field">
+            <label>Comment</label>
+            <textarea name="comment" rows="3" class="ud-input" placeholder="Share your thoughts…"></textarea>
+          </div>
+          <div class="ud-actions">
+            <button type="submit" class="ud-btn">Post Review</button>
+          </div>
+        </form>
+      </article>
+    </div>
+
+    <!-- Lists row -->
+    <div style="height:18px"></div>
+    <div class="ud-grid-2">
+      <!-- Recent UGC -->
+      <article class="ud-card">
+        <div class="ud-card-head">
+          <h2 class="ud-card-title">Recent UGC</h2>
+        </div>
+        {% if ugc_list %}
+          <ul class="ud-list">
+            {% for u in ugc_list %}
+              <li>
+                <span class="ud-ugc-type">{{ u.content_type|title }}</span> —
+                {{ u.content_data|default:"(no text)" }}
+                <span class="ud-muted"> · {{ u.posted_on|date:"M d, Y" }}</span>
+                {% if u.content_type == "photo" and u.photos.all %}
+                  <div class="ud-note" style="margin-left:12px;">
+                    Photo URL: {{ u.photos.all.0.image_url }}
+                  </div>
+                {% endif %}
+                {% if u.user_id == account_user.user_id %}
+                  <span class="ud-pill ud-own">yours</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="ud-muted">No UGC yet for this event.</p>
+        {% endif %}
+      </article>
+
+      <!-- Recent Reviews -->
+      <article class="ud-card">
+        <div class="ud-card-head">
+          <h2 class="ud-card-title">Recent Reviews</h2>
+        </div>
+        {% if reviews %}
+          <ul class="ud-list">
+            {% for r in reviews %}
+              <li>
+                <span class="ud-review-rating">★ {{ r.rating }}/5</span>
+                {% if r.comment %} — {{ r.comment }}{% endif %}
+                <span class="ud-muted"> · {{ r.date_posted|date:"M d, Y" }}</span>
+                {% if r.user_id == account_user.user_id %}
+                  <span class="ud-pill ud-own">yours</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="ud-muted">No reviews yet for this event.</p>
+        {% endif %}
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "accounts/base.html" %}
+{% block title %}Create Event{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:820px">
+  <h2 class="mb-3">Create Event</h2><br>
+  <div class="card shadow-sm p-3">
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Title</label>
+        <input name="title" class="form-control" required>
+      </div><br> 
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Description</label>
+        <textarea name="description" rows="4" class="form-control"></textarea>
+      </div><br>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">Date & Time</label>
+          <input type="datetime-local" name="date_time" class="form-control">
+        </div><br>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">Location</label>
+          <input name="location" class="form-control" placeholder="Auditorium, Mumbai campus">
+        </div>
+      </div><br>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary">Create</button>
+        <a href="{% url 'events:admin_manage_events' %}" class="btn btn-light">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <!-- already in your base, but double-check it’s present and after the HTML -->
+  
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <head>
@@ -14,20 +14,51 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
-    <header class="navbar">
-        <div class="left-section">
-            <!-- menu trigger (inside your header left-section) -->
-            <div class="menu-icon" id="menuTrigger">&#9776;</div>
+   <header class="navbar">
+  <div class="left-section">
+    <!-- Hamburger -->
+    <button class="menu-icon" id="menuTrigger" aria-controls="sideMenu" aria-expanded="false" aria-label="Open menu">
+      &#9776;
+    </button>
+    <!-- Side Drawer -->
+    <nav class="side-menu" id="sideMenu" aria-hidden="true">
+  {# ===== ADMIN MENU (custom AdminProfile session) ===== #}
+  {% if request.session.admin_id %}
+    <div class="side-title">Welcome, Admin!</div>
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'events:admin_create_event' %}">Create Event</a>
+    <a href="{% url 'events:admin_manage_events' %}">Manage Events</a>
+    <a href="">Registrations (Update)</a>
+    <a href="{% url 'events:sponsorship_hub' %}">Sponsorship</a>
+    <a href="">Insights / Analytics</a>
+    <a href="">Event Reviews</a>
+    <hr>
+    <a href="{% url 'admin_logout' %}" class="logout-link">Logout</a>
 
-            <!-- side drawer -->
-            <nav class="side-menu" id="sideMenu" aria-hidden="true">
-                <a href="{% url 'admin_login' %}">Admin Login</a>
-                <a href="{% url 'login' %}">User Login</a>
-                <a href="{% url 'events:sponsorship_hub' %}">Sponsorship</a>
-                <a href="#">Insights / Analytics</a>
-            </nav>
-            <div id="overlay" class="overlay" hidden></div> 
-            
+  {# ===== USER MENU (custom UserProfile session) ===== #}
+  {% elif request.session.user_id %}
+    <div class="side-title">
+      {% if account_user %}Welcome, {{ account_user.username }}!{% else %}Welcome!{% endif %}
+    </div>
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'events:events_page' %}">Events</a>
+    <a href="{% url 'ugc:my_ugc' %}">My UGC</a>
+    <a href="{% url 'ugc:my_reviews' %}">My Reviews</a>
+    <hr>
+    <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+
+  {# ===== PUBLIC MENU ===== #}
+  {% else %}
+    <div class="side-title">Menu</div>
+    <a href="{% url 'admin_login' %}">Admin Login</a>
+    <a href="{% url 'login' %}">User Login</a>
+    <a href="{% url 'events:sponsorship_hub' %}">Sponsorship</a>
+  {% endif %}
+</nav>
+    <!-- Overlay (click to close) -->
+    <div id="overlay" class="overlay" hidden></div>
+
             <img src="{% static 'image/logo.png' %}" alt="Logo" />
             <div class="site-title"><h1>Forever Fest</h1></div>
 
@@ -49,10 +80,29 @@
           </form>
 
         <div class="right-section">
-            <div class="nav-buttons">
-                <a href="{% url 'login' %}" class="btn login">Login</a>
-                <a href="{% url 'admin_login' %}" class="btn admin">Admin</a>
-            </div>
+         <div class="nav-buttons">
+
+        {# ----- Custom Admin session (AdminProfile) ----- #}
+        {% if request.session.admin_id %}
+        <a href="{% url 'admin_dashboard' %}" class="btn admin">Admin Dashboard</a>
+        <a href="{% url 'admin_logout' %}" class="btn login">Logout</a>
+
+        {# ----- Custom User session (UserProfile) ----- #}
+        {% elif request.session.user_id %}
+        {% if account_user %}
+        <span class="user-welcome">Hi, {{ account_user.username }}</span>
+        &nbsp;
+        {% endif %}
+        <a href="{% url 'dashboard' %}" class="btn login">Dashboard</a>
+        <a href="{% url 'logout' %}" class="btn admin">Logout</a>
+
+         {# ----- Visitor (not logged in) ----- #}
+         {% else %}
+         <a href="{% url 'login' %}" class="btn login">Login</a>
+         <a href="{% url 'admin_login' %}" class="btn admin">Admin</a>
+         {% endif %}
+
+         </div>
         </div>
     </header>
 
@@ -102,6 +152,8 @@ document.addEventListener('DOMContentLoaded', function(){
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 });
 </script>
+
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const group = document.querySelector('.btn-group');

@@ -2,74 +2,94 @@
 {% load static %}
 {% block title %}My UGC{% endblock %}
 
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/my_ugc.css' %}">
+
 <section class="ud-wrap">
-  <div class="container">
+  <div class="ud-container">
     <h1 class="ud-page-title">My UGC</h1>
 
     {% if items %}
-      <ul class="ud-list">
+      <div class="ugc-grid">
         {% for u in items %}
-          <li class="ugc-item">
-            <div class="ugc-meta">
-              <strong>{{ u.content_type|title }}</strong>
-              <span class="ud-muted"> · {{ u.posted_on|date:"M d, Y" }}</span>
+          <article class="ugc-card">
+            <div class="ugc-head">
+              <div class="ugc-type">{{ u.content_type|title }}</div>
+              <div class="ugc-date">{{ u.posted_on|date:"M d, Y" }}</div>
             </div>
 
-            <div class="ugc-caption">{{ u.content_data|default:"(no caption)" }}</div>
+            <div class="row">
+              <div class="label">Event</div>
+              <div class="value">
+                {{ u.event.title }} ({{ u.event.event_id }})
+                — <a class="link" href="{% url 'ugc:event_hub' u.event.event_id %}">Share & Review</a>
+              </div>
+            </div>
 
-            {# render photos if any #}
-            {% with photos=u.photos.all %}
-              {% if photos %}
-                <div class="ugc-photos">
-                  {% for p in photos %}
-                    <img src="{{ p.image_url }}" alt="Photo" class="ugc-photo">
-                  {% endfor %}
+            {% with p=u.photos.all|first %}
+              {% if p %}
+              <div class="row">
+                <div class="label">Photo</div>
+                <div class="value">
+                  <div class="photo-box">
+                    <img src="{{ p.image_url }}" alt="Photo for {{ u.event.title }}">
+                  </div>
                 </div>
+              </div>
               {% endif %}
             {% endwith %}
 
-            <div class="ud-note">
-              Event: {{ u.event.title }} ({{ u.event.event_id }}) —
-              <a href="{% url 'ugc:event_hub' u.event.event_id %}">Share &amp; Review for this event</a>
+            <div class="row">
+              <div class="label">Caption</div>
+              <div class="value">{{ u.content_data|default:"(no caption)" }}</div>
             </div>
 
-            {# 🗑 Delete button #}
-            <form method="post" 
-                  action="{% url 'ugc:delete_ugc' u.ugc_id %}" 
-                  onsubmit="return confirm('Delete this post? This cannot be undone.');">
-              {% csrf_token %}
-              <button type="submit" class="ud-btn-danger">Delete</button>
-            </form>
-          </li>
+            <div class="ugc-actions">
+              <form method="post" action="{% url 'ugc:delete_ugc' u.ugc_id %}"
+                    onsubmit="return confirm('Delete this post? This cannot be undone.');">
+                {% csrf_token %}
+                <button type="submit" class="ud-btn-danger">Delete</button>
+              </form>
+            </div>
+          </article>
         {% endfor %}
-      </ul>
+      </div>
     {% else %}
       <p class="ud-muted">You haven’t uploaded anything yet.</p>
-      <p>
-        Go to <a href="{% url 'events:events_page' %}">Events</a> and open an event’s
-        “Share &amp; Review” page to post UGC.
-      </p>
+      <p>Go to <a class="link" href="{% url 'events:events_page' %}">Events</a> and open an event’s “Share &amp; Review” page to post UGC.</p>
+    {% endif %}
+
+      {# --- Your reviews, on the same page --- #}
+    <h2 class="ugc-subtitle">My Reviews</h2>
+    {% if reviews %}
+      <div class="review-grid">
+        {% for r in reviews %}
+          <article class="review-card">
+            <div class="review-row">
+              <span class="stars">★ {{ r.rating }}/5</span>
+              <span class="review-date">{{ r.date_posted|date:"M d, Y" }}</span>
+            </div>
+            {% if r.comment %}
+              <p class="review-comment">{{ r.comment }}</p>
+            {% endif %}
+            <div class="review-meta">
+              <span class="k">Event:</span>
+              <span class="v">{{ r.event.title }} ({{ r.event.event_id }})</span>
+            </div>
+            <a class="ugc-link" href="{% url 'ugc:event_hub' r.event.event_id %}">
+              Update / add more for this event
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">You haven’t written any reviews yet.</p>
     {% endif %}
   </div>
+
 </section>
 
-<style>
-.ugc-photos { margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; }
-.ugc-photo { max-width: 240px; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
-.ugc-caption { margin-top: 4px; }
-.ud-btn-danger {
-  background: #e63946;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 8px;
-}
-.ud-btn-danger:hover {
-  background: #c71c2c;
-}
-</style>
+
 
 {% endblock %}

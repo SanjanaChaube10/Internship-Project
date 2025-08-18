@@ -1873,14 +1873,14 @@ footer {
 }
 
 /* If you prefer flex instead of grid, comment the 3 lines above and use: */
-/*
+
 .events-grid{
   display: flex !important;
   flex-wrap: wrap;
   gap: 24px;
   width: 100%;
 }
-.event-card{ flex: 1 1 260px; max-width: 360px; }
+.event-card{ flex: 1 1 260px; max-width: 365px; }
 */
 
 /* Card */
@@ -1944,7 +1944,7 @@ footer {
   display:flex;
   gap:10px;
 }
-.btn-register,.btn-details{
+.btn-register,.btn-details,.btn-secondary{
   display:inline-block;
   padding:8px 12px;
   border-radius:8px;
@@ -1952,10 +1952,12 @@ footer {
   font-size:.9rem;
   text-decoration:none;
 }
-.btn-register{ background:#6d28d9; color:#fff; }
-.btn-register:hover{ background:#5b21b6; }
-.btn-details{ background:#f3f4f6; color:#111827; }
-.btn-details:hover{ background:#e5e7eb; }
+.btn-register{ background:#482a79; color:#fff; }
+.btn-register:hover{ background:#5f4885; }
+.btn-details{ background:#d3d5da; color:#111827; }
+.btn-details:hover{ background:#e9eef7; }
+.btn-secondary{ background:#d3d5da; color:#111827; }
+.btn-secondary:hover{ background:#e9eef7; }
 
 
 

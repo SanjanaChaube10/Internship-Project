@@ -86,7 +86,7 @@
   display:flex;
   gap:10px;
 }
-.btn-register,.btn-details{
+.btn-register,.btn-details, .btn-secondary{
   display:inline-block;
   padding:8px 12px;
   border-radius:8px;
@@ -96,5 +96,7 @@
 }
 .btn-register{ background:#6d28d9; color:#fff; }
 .btn-register:hover{ background:#5b21b6; }
-.btn-details{ background:#f3f4f6; color:#111827; }
-.btn-details:hover{ background:#e5e7eb; }
+.btn-details{ background:#e2e4e7; color:#111827; }
+.btn-details:hover{ background:#d2d4da; }
+.btn-secondary{ background:#d9dee6; color:#111827;}
+.btn-secondary:hover{background:#caced6;}

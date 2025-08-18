@@ -1,0 +1,195 @@
+/* -------------------------------
+   Forever Fest — My UGC (cards)
+   ------------------------------- */
+:root{
+  --bg:#fbf7ff;         /* page */
+  --card:#ffffff;       /* card */
+  --ink:#1f2336;        /* text */
+  --muted:#8b82a6;      /* secondary */
+  --ring:#e9dbff;       /* border */
+  --accent:#6b3cf5;     /* purple */
+  --accent-2:#8c63ff;
+  --danger:#e63946;
+  --shadow:0 8px 30px rgba(35,19,77,.08);
+  --radius:16px;
+}
+
+.ud-wrap{
+  background:var(--bg);
+  min-height:calc(100vh - 140px);
+  padding:42px 18px 64px;
+  display:flex; justify-content:center;
+}
+
+.ud-container{
+  width:100%; max-width:980px; margin:0 auto;
+}
+
+.ud-page-title{
+  margin:0 0 20px;
+  font-size:clamp(28px,2.6vw,38px);
+  font-weight:800; color:var(--ink);
+}
+
+/* Grid holding the cards */
+.ugc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;   /* center cards horizontally */
+}
+
+/* Each card */
+.ugc-card {
+  background: var(--card);
+  border: 1px solid var(--ring);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  width: 100%;
+  max-width: 320px;   /* keeps them tidy */
+  display: flex;
+  flex-direction: column;
+}
+
+/* header line (type & date) */
+.ugc-head{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:12px; gap:10px; flex-wrap:wrap;
+}
+.ugc-type{ font-weight:800; color:#5a2ca0; }
+.ugc-date{ color:var(--muted); }
+
+/* labeled rows */
+.row{
+  display:grid; grid-template-columns:120px 1fr;
+  gap:12px; align-items:start; margin:10px 0;
+}
+.label{ color:var(--muted); font-weight:700; }
+.value{ color:var(--ink); }
+
+/* photo area */
+.photo-box{
+  background:#f7f3ff; border:1px dashed var(--ring);
+  border-radius:12px; padding:10px; width:100%;
+}
+.photo-box img{
+  display:block; max-width:100%; height:auto; border-radius:12px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+
+/* actions */
+.ugc-actions{ display:flex; gap:10px; margin-top:8px; }
+.ud-btn-danger{
+  background:var(--danger); color:#fff; border:none;
+  padding:8px 14px; border-radius:10px; cursor:pointer;
+  font-weight:700;
+}
+.ud-btn-danger:hover{ background:#c71c2c; }
+
+/* link */
+.link{ color:var(--accent); text-decoration:none; font-weight:700; }
+.link:hover{ color:var(--accent-2); text-decoration:underline; }
+
+/* ---------- Palette & base ---------- */
+:root{
+  --bg:#f8f5fb;
+  --card:#fff;
+  --ink:#1b1734;
+  --muted:#7a7396;
+  --primary:#6b2ddc;
+  --ring:#eadffd;
+  --danger:#e53935;
+  --radius:16px;
+  --shadow:0 8px 24px rgba(17,10,54,.08);
+}
+
+.ugc-wrap{ background:var(--bg); padding:32px 0 64px; }
+.ugc-container{ width:min(1100px, 92%); margin:0 auto; }
+.ugc-title{ font-size:2rem; font-weight:800; color:var(--ink); margin:0 0 14px; }
+.ugc-subtitle{ font-size:1.35rem; font-weight:800; color:var(--ink); margin:30px 0 14px; }
+.muted{ color:var(--muted); }
+
+/* ---------- UGC cards grid (horizontal) ---------- */
+.ugc-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:20px;
+  justify-items:center;
+}
+.ugc-card{
+  width:100%;
+  max-width:340px;
+  background:var(--card);
+  border:1px solid var(--ring);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px 16px 14px;
+  display:flex;
+  flex-direction:column;
+}
+.ugc-card-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.ugc-type{ font-weight:700; color:var(--primary); }
+.ugc-date{ color:var(--muted); font-size:.9rem; }
+
+.ugc-media{ margin:6px 0 10px; }
+.ugc-img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+}
+
+.ugc-caption{ color:var(--ink); line-height:1.4; margin:6px 0 10px; min-height:1.2em; }
+
+/* info lines + actions */
+.ugc-meta{ margin-top:auto; }
+.ugc-line{ display:flex; gap:6px; font-size:.95rem; color:var(--ink); }
+.ugc-line .k{ color:var(--muted); }
+.ugc-actions{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.ugc-link{ color:var(--primary); text-decoration:none; font-weight:700; }
+.ugc-link:hover{ text-decoration:underline; }
+
+.btn-danger{
+  background:var(--danger);
+  color:#fff;
+  border:none;
+  padding:6px 12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.btn-danger:hover{ filter:brightness(.95); }
+
+/* ---------- Review cards grid ---------- */
+.review-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:20px;
+}
+.review-card{
+  background:var(--card);
+  border:1px solid var(--ring);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px 18px;
+  max-width:340px;
+}
+.review-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.stars{ color:#ff9800; font-weight:800; }
+.review-date{ color:var(--muted); font-size:.9rem; }
+.review-comment{ margin:6px 0 8px; color:var(--ink); }
+.review-meta{ color:var(--ink); font-size:.95rem; }
+.review-meta .k{ color:var(--muted); }
+
+/* ---------- Small screens ---------- */
+@media (max-width:640px){
+  .ugc-title{ font-size:1.7rem; }
+  .ugc-img{ height:200px; }
+}

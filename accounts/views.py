@@ -182,12 +182,19 @@ def profile_edit_view(request):
         messages.error(request, "Session invalid. Please log in again.")
         return redirect("login")
 
+     # Only allow these two fields
     user.profile_info = (request.POST.get("profile_info") or "").strip() or None
-    user.preferences  = (request.POST.get("preferences")  or "").strip() or None
-    user.save(update_fields=["profile_info", "preferences"])
 
+    # MULTI-SELECT: getlist -> "Tech Fest, Cultural Fest"
+    pref_list = request.POST.getlist("preferences")
+    # Normalize (optional)
+    pref_list = [p.strip() for p in pref_list if p.strip()]
+    user.preferences = ", ".join(pref_list) or None
+
+    user.save(update_fields=["profile_info", "preferences"])
     messages.success(request, "Profile updated.")
     return redirect("dashboard")
+
 
 # ---------- USER LOGOUT ----------
 def logout_view(request):

@@ -154,9 +154,18 @@ def my_ugc_view(request):
         .prefetch_related("photos")
         .order_by("-posted_on", "-ugc_id")
     )
+
+    my_reviews = (
+        Review.objects
+        .filter(user=user)
+        .select_related("event")
+        .order_by("-date_posted", "-review_id")
+    )
+
     return render(request, "ugc/my_ugc.html", {
         "account_user": user,
         "items": items,
+         "reviews": my_reviews,
     })
 
 
@@ -198,19 +207,3 @@ def delete_ugc_view(request, ugc_id: str):
 
 
 
-def my_reviews_view(request):
-    user = _get_logged_profile(request)
-    if not user:
-        messages.error(request, "Please log in to continue.")
-        return redirect("login")
-
-    reviews = (
-        Review.objects
-        .filter(user=user)
-        .select_related("event")
-        .order_by("-date_posted", "-review_id")
-    )
-    return render(request, "ugc/my_reviews.html", {
-        "account_user": user,
-        "reviews": reviews,
-    })

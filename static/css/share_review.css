@@ -1,0 +1,133 @@
+/* -------------------------------------------
+   Forever Fest — Share & Review (event hub)
+   ------------------------------------------- */
+
+/* theme */
+:root{
+  --bg-offwhite:#fbf7ff;          /* page background */
+  --card:#ffffff;                  /* card surface */
+  --ink:#1f2336;                   /* primary text */
+  --muted:#8b82a6;                 /* secondary text */
+  --primary:#6b3cf5;               /* purple */
+  --primary-2:#8c63ff;            /* lighter purple */
+  --ring:#e9dbff;                  /* soft outline */
+  --shadow:0 8px 30px rgba(35,19,77,.08);
+  --radius:16px;
+}
+
+/* page wrapper centered */
+.ud-wrap{
+  display:flex;
+  justify-content:center;
+  background:var(--bg-offwhite);
+  padding:42px 18px 64px;
+  min-height:calc(100vh - 140px); /* leaves room for your site header */
+}
+
+/* max width container */
+.ud-container{
+  width:100%;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* title */
+.ud-page-title{
+  margin:0 0 20px;
+  font-size:clamp(28px,2.6vw,38px);
+  font-weight:800;
+  color:var(--ink);
+}
+
+/* grid for 2 columns (forms row + lists row) */
+.ud-grid-2{
+  display:grid;
+  gap:22px;
+  grid-template-columns:1fr;
+}
+@media (min-width:900px){
+  .ud-grid-2{ grid-template-columns:1fr 1fr; }
+}
+
+/* card */
+.ud-card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border:1px solid var(--ring);
+  padding:22px;
+}
+
+/* card header */
+.ud-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:14px;
+}
+.ud-card-title{
+  margin:0;
+  font-size:clamp(18px,2vw,22px);
+  font-weight:800;
+  color:var(--ink);
+}
+
+/* pill + notes */
+.ud-pill{
+  display:inline-block;
+  padding:.28rem .7rem;
+  border-radius:999px;
+  background:#f1ecff;
+  color:#5a2ca0;
+  font-weight:700;
+  font-size:.82rem;
+}
+.ud-note{ color:var(--muted); font-size:.95rem; }
+
+/* fields always fill card width */
+.ud-field{ margin:12px 0; }
+.ud-field label{ font-weight:700; color:var(--ink); display:block; margin-bottom:6px; }
+.ud-input,
+.ud-field textarea,
+.ud-field select,
+.ud-field input[type="file"]{
+  width:100%;
+  display:block;
+  border:1.5px solid var(--ring);
+  border-radius:12px;
+  padding:10px 12px;
+  outline:0;
+  background:#fff;
+}
+.ud-field textarea{ resize:vertical; min-height:90px; }
+
+/* caption counter */
+.char-hint{ text-align:right; margin-top:6px; color:var(--muted); font-size:.9rem; }
+
+/* buttons */
+.ud-btn{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:10px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+.ud-btn:hover{ background:var(--primary-2); }
+.ud-actions{ margin-top:14px; display:flex; justify-content:flex-end; gap:10px; }
+
+/* preview area */
+.ugc-preview{ border:1px dashed var(--ring); border-radius:12px; padding:10px; }
+.ugc-preview img{ max-width:100%; height:auto; display:block; border-radius:12px; }
+
+/* list styling */
+.ud-list{ margin:0; padding-left:18px; }
+.ud-list li{ margin:6px 0; color:var(--ink); }
+.ud-muted{ color:var(--muted); }
+
+/* small helpers from your inline styles */
+.ud-ugc-type{ font-weight:700; color:#5a2ca0; }
+.ud-review-rating{ font-weight:700; color:#ff9800; }
+.ud-own{ background:#e9dbff; }

@@ -1,117 +1,136 @@
+{# accounts/templates/accounts/dashboard.html #}
 {% extends "accounts/base.html" %}
 {% load static %}
 {% block title %}User Dashboard{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/user_dashboard.css' %}">
-{% endblock %}
-
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/user_dashboard.css' %}">
+
+
 <section class="ud-wrap">
-  <div class="container">
+  <div class="ud-container"> 
     <h1 class="ud-page-title">User Dashboard</h1>
 
     <div class="ud-cards">
 
       <!-- 1) PROFILE OVERVIEW -->
       <article class="ud-card">
-        <div class="ud-card-head">
-          <div class="ud-head-left">
-            <img class="ud-avatar" src="{% static 'image/logo.png' %}" alt="avatar">
-            <h2 class="ud-card-title">Profile Overview</h2>
-          </div>
-          <button id="editToggleBtn" class="ud-btn">✏ Edit</button>
-        </div>
+           <div class="ud-card-head">
+            <div class="ud-head-left">
+             <img class="ud-avatar" src="{% static 'image/logo.png' %}" alt="avatar">
+              <h2 class="ud-card-title">Profile Overview</h2>
+           </div>
+           <button id="editToggleBtn" class="ud-btn">✏ Edit</button>
+           </div>
+
+
 
         <!-- Display info -->
         <div id="profileDisplay" class="ud-lines">
-          <div><span class="ud-k">User ID:</span> <span class="ud-v">{{ account_user.user_id }}</span></div>
-          <div><span class="ud-k">Name:</span> <span class="ud-v">{{ account_user.username }}</span></div>
-          <div><span class="ud-k">Email:</span> <span class="ud-v">{{ account_user.email }}</span></div>
-          <div><span class="ud-k">Profile Info:</span> <span class="ud-v">{{ account_user.profile_info|default:"— not set —" }}</span></div>
-          <div><span class="ud-k">Preferences:</span> <span class="ud-v">{{ account_user.preferences|default:"— not set —" }}</span></div>
+        <div><span class="ud-k">User ID:</span> <span class="ud-v">{{ account_user.user_id }}</span></div>
+        <div><span class="ud-k">Name:</span> <span class="ud-v">{{ account_user.username }}</span></div>
+        <div><span class="ud-k">Email:</span> <span class="ud-v">{{ account_user.email }}</span></div>
+        <div><span class="ud-k">Profile Info:</span> <span class="ud-v">{{ account_user.profile_info|default:"— not set —" }}</span></div>
+        <div><span class="ud-k">Preferences:</span> <span class="ud-v">{{ account_user.preferences|default:"— not set —" }}</span></div>
         </div>
 
-        <!-- Inline edit form -->
-        <form id="profileForm" method="post" action="{% url 'profile_edit' %}" class="ud-edit-form">
-          {% csrf_token %}
-          <div class="ud-field">
-            <label>Profile Info</label>
-            <textarea name="profile_info" rows="3" class="ud-input"
-                      placeholder="Tell us something about you">{{ account_user.profile_info }}</textarea>
-          </div>
-          <div class="ud-field">
-            <label>Preferences</label>
-            <input type="text" name="preferences" class="ud-input"
-                   placeholder="e.g. tech fest, cultural fest"
-                   value="{{ account_user.preferences|default:'' }}">
-          </div>
-          <div class="ud-actions">
-            <button type="button" id="cancelBtn" class="ud-btn-light">Cancel</button>
-            <button type="submit" class="ud-btn">Save Changes</button>
-          </div>
-        </form>
-      </article>
 
-  
+        <!-- Inline edit form (hidden by default) -->
+         <form id="profileForm" method="post" action="{% url 'profile_edit' %}" class="ud-edit-form is-hidden" novalidate>
+    {% csrf_token %}
+
+    <div class="ud-field">
+      <label class="ud-label">Profile Info</label>
+      <textarea name="profile_info" rows="3" class="ud-input"
+                placeholder="Tell us something about you">{{ account_user.profile_info }}</textarea>
+    </div>
+
+    <div class="ud-field">
+      <label class="ud-label">Preferences</label>
+      {% with prefs=account_user.preferences|default:"" %}
+      <div class="ud-checkbox-grid">
+        <label class="ud-check">
+          <input type="checkbox" name="preferences" value="Tech Fest"
+                 {% if "Tech Fest" in prefs %}checked{% endif %}>
+          <span>Tech Fest</span>
+        </label>
+        <label class="ud-check">
+          <input type="checkbox" name="preferences" value="Cultural Fest"
+                 {% if "Cultural Fest" in prefs %}checked{% endif %}>
+          <span>Cultural Fest</span>
+        </label>
+        <label class="ud-check">
+          <input type="checkbox" name="preferences" value="Sports Events"
+                 {% if "Sports Events" in prefs %}checked{% endif %}>
+          <span>Sports Events</span>
+        </label>
+        <label class="ud-check">
+          <input type="checkbox" name="preferences" value="Workshops"
+                 {% if "Workshops" in prefs %}checked{% endif %}>
+          <span>Workshops</span>
+        </label>
+        <label class="ud-check">
+          <input type="checkbox" name="preferences" value="Seminars"
+             {% if "Seminars" in prefs %}checked{% endif %}>
+          <span>Seminars</span>
+        </label>
+      </div>
+      {% endwith %}
+      <small class="ud-help">Pick as many as you like.</small>
+      </div>
+
+      <div class="ud-actions">
+      <button type="button" id="cancelBtn" class="ud-btn-light">Cancel</button>
+      <button type="submit" class="ud-btn">Save Changes</button>
+      </div>
+  </form>
+</article>
+
       <!-- 2) RECENT EVENTS REGISTERED -->
-     <article class="ud-card">
-           <div class="ud-card-head">
-           <h2 class="ud-card-title">Recent Events Registered</h2>
-           </div>
+      <article class="ud-card">
+        <div class="ud-card-head">
+          <h2 class="ud-card-title">Recent Events Registered</h2>
+        </div>
 
-         {% if registrations %}
+        {% if registrations %}
           <ul class="ud-list">
-         {% for r in registrations %}
-         <li>
-          {{ r.label }}
-          {% if r.date_str %}<span class="ud-muted"> — {{ r.date_str }}</span>{% endif %}
-        </li>
-         {% endfor %}
-        </ul>
-         {% else %}
-       <p class="ud-muted">No registrations yet.</p>
-       {% endif %}
-        </article>
-
-     <!-- 3) YOUR UPLOADS & UGC -->
-       <article class="ud-card">
-         <div class="ud-card-head">
-         <h2 class="ud-card-title">Your Uploads &amp; UGC</h2>
-         </div>
-
-        {% if uploads %}
-        <ul class="ud-list">
-        {% for u in uploads %}
-         <li>
-          {{ u.label }}
-          {% if u.meta %}<span class="ud-muted"> — {{ u.meta }}</span>{% endif %}
-        </li>
-        {% endfor %}
-        </ul>
-         {% else %}
-          <p class="ud-muted">You haven’t uploaded anything yet.</p>
+            {% for r in registrations %}
+              <li>{{ r.label }} {% if r.date_str %}<span class="ud-muted">— {{ r.date_str }}</span>{% endif %}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="ud-muted">No registrations yet.</p>
         {% endif %}
-        </article>
+      </article>
 
     </div>
   </div>
 </section>
 
 <script>
-  const editBtn = document.getElementById('editToggleBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
-  const display = document.getElementById('profileDisplay');
-  const form = document.getElementById('profileForm');
+  (function () {
+    const editBtn  = document.getElementById('editToggleBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const display  = document.getElementById('profileDisplay');
+    const form     = document.getElementById('profileForm');
 
-  editBtn.addEventListener('click', () => {
-    display.style.display = 'none';
-    form.style.display = 'block';
-  });
-  cancelBtn.addEventListener('click', () => {
-    form.style.display = 'none';
-    display.style.display = 'grid';
-  });
+    function showForm(show) {
+      if (show) {
+        display.classList.add('is-hidden');
+        form.classList.remove('is-hidden');
+      } else {
+        form.classList.add('is-hidden');
+        display.classList.remove('is-hidden');
+      }
+      // keep the whole card in view
+      form.closest('.ud-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    editBtn.addEventListener('click', () => showForm(true));
+    cancelBtn.addEventListener('click', () => showForm(false));
+    // start hidden
+    showForm(false);
+  })();
 </script>
 
 {% endblock %}

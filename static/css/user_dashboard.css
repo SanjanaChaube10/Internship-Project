@@ -148,3 +148,124 @@ html, body { background: var(--ff-bg); }
 /* ===== SHOW THE FORM WHEN YOU SWITCH TO EDIT MODE ===== */
 /* If you’re using the small JS toggle from the template:
    we simply ensure the form is full-width and looks part of the card. */
+
+
+   /* ====== Event Hub (UGC Post) ====== */
+/* Palette: off-white bg + purple accents */
+:root{
+  --bg: #fbf8ff;
+  --ink: #2b2240;
+  --muted: #7a6d99;
+  --brand: #6e34d9;
+  --brand-2: #9a6cff;
+  --ring: rgba(110,52,217,.25);
+  --border: #e9ddff;
+  --card: #ffffff;
+  --shadow: 0 10px 24px rgba(34,18,51,.08);
+  --radius-xl: 18px;
+  --radius-md: 12px;
+}
+
+/* Card shell (uses same ud-* naming you already have) */
+.ud-card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.ud-card-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; margin-bottom: 10px;
+}
+
+.ud-card-title{
+  margin:0; font-weight: 800; color: var(--ink); font-size: 20px;
+}
+
+.ud-pill{
+  display:inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f2eaff;
+  color: var(--brand);
+  border: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* Form fields */
+.ud-field{ margin-bottom: 12px; }
+.ud-field label{ display:block; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+.ud-note{ color: var(--muted); font-size: 12px; }
+
+.ud-input{
+  width:100%;
+  background:#fff;
+  border: 1px solid #e7e2f6;
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  color: var(--ink);
+  outline: none;
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+.ud-input:focus{
+  border-color: var(--brand-2);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* Type toggle pills (Photo / Video) */
+.type-toggle{
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+
+.toggle-pill{
+  padding:8px 14px; border-radius:999px; cursor:pointer; user-select:none;
+  border:1px solid var(--border); background:#fff; font-weight:700; color: var(--ink);
+  transition: background .12s ease, color .12s ease, border-color .12s ease, transform .08s ease;
+}
+.toggle-pill:hover{ transform: translateY(-1px); }
+
+#type-photo:checked + .toggle-pill,
+#type-video:checked + .toggle-pill{
+  background: var(--brand);
+  color:#fff;
+  border-color: var(--brand);
+}
+
+/* Preview */
+.ugc-preview{ margin-top:10px; }
+.ugc-preview img,
+.ugc-preview video{
+  max-width:100%;
+  height:auto;
+  display:block;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(34,18,51,.08);
+}
+
+/* Caption counter */
+.char-hint{
+  font-size:12px; color: var(--muted);
+  text-align:right; margin-top:4px;
+}
+
+/* Actions */
+.ud-actions{ display:flex; gap:10px; justify-content:flex-end; }
+
+.ud-btn{
+  background: linear-gradient(180deg, var(--brand-2), var(--brand));
+  color:#fff; border:0; border-radius: 999px;
+  padding:10px 16px; font-weight: 800; letter-spacing:.2px;
+  box-shadow: 0 10px 22px rgba(110,52,217,.18);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+.ud-btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+.ud-btn:active{ transform: translateY(0); }
+
+/* Small screens */
+@media (max-width: 640px){
+  .ud-actions{ justify-content:stretch; }
+  .ud-btn{ width:100%; }
+}

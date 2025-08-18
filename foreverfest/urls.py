@@ -26,7 +26,6 @@ urlpatterns = [
     path('', include('accounts.urls')),  
     path("colleges/", include("colleges.urls",namespace="colleges")),
     path("events/", include("events.urls", namespace="events")),
-    path("", include(("registrations.urls","registrations"), namespace="registrations")),
     path("ugc/", include("ugc.urls", namespace="ugc")),
 
 
@@ -35,9 +34,11 @@ urlpatterns = [
 
 
 
-# (DEV ONLY) serve static if DEBUG=True. Not needed if you used STATICFILES_DIRS + runserver,
-# but it’s fine to include:
+
 from django.conf import settings
 from django.conf.urls.static import static
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.BASE_DIR / "static")
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -30,35 +30,45 @@
     <div class="ud-grid-2">
       <!-- UGC form -->
       <article class="ud-card">
-        <div class="ud-card-head">
-          <h2 class="ud-card-title">Post UGC</h2>
-          <span class="ud-pill">Event: {{ event.event_id }}</span>
-        </div>
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="intent" value="ugc">
-          <div class="ud-field">
-            <label>Content Type</label>
-            <select name="content_type" class="ud-input">
-              <option value="photo">Photo</option>
-              <option value="video">Video</option>
-              <option value="text">Text</option>
-            </select>
-          </div>
-          <div class="ud-field">
-            <label>Content Data (caption / link / text)</label>
-            <textarea name="content_data" rows="3" class="ud-input" placeholder="Say something about your post…"></textarea>
-          </div>
-          <div class="ud-field">
-            <label>Image URL (only if type = Photo)</label>
-            <input name="image_url" class="ud-input" placeholder="https://…">
-          </div>
-          <div class="ud-actions">
-            <button type="submit" class="ud-btn">Share</button>
-          </div>
-          <p class="ud-note">Photo: also creates a Photo row linked to this UGC.</p>
-        </form>
-      </article>
+  <div class="ud-card-head">
+    <h2 class="ud-card-title">Post UGC</h2>
+    <span class="ud-pill">Event: {{ event.event_id }}</span>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" id="ugcForm">
+    {% csrf_token %}
+    <input type="hidden" name="intent" value="ugc">
+
+    <!-- Type toggle -->
+    <div class="ud-field">
+      <label class="mb-2 d-block">Post Type</label>
+      <div class="type-toggle" role="tablist" aria-label="UGC type">
+        <input type="radio" id="type-photo" name="content_type" value="photo" checked hidden>
+        <label for="type-photo" class="toggle-pill">Photo</label>
+      </div>
+      <small class="ud-note" id="typeHelp">Upload an image for Photo. </small>
+    </div>
+
+    <!-- File input + live preview -->
+    <div class="ud-field">
+      <label>Upload</label>
+      <input type="file" name="upload_file" id="uploadFile" class="ud-input" accept="image/*" required>
+      <div id="preview" class="ugc-preview" style="display:none; margin-top:10px;"></div>
+    </div>
+
+    <!-- Caption like Instagram -->
+    <div class="ud-field">
+      <label>Caption</label>
+      <textarea name="content_data" id="caption" rows="3" class="ud-input" maxlength="150" placeholder="Write a caption…"></textarea>
+      <div class="char-hint"><span id="capCount">0</span>/150</div>
+    </div>
+
+    <div class="ud-actions">
+      <button type="submit" class="ud-btn">Share</button>
+    </div>
+  </form>
+</article>
+
 
       <!-- Review form -->
       <article class="ud-card">
@@ -146,4 +156,75 @@
     </div>
   </div>
 </section>
+
+<script>
+  // (optional) show/hide file input for Text-only posts
+  const typeSel = document.getElementById('ugcType');
+  const fileRow = document.getElementById('fileRow');
+  function toggleFile() {
+    fileRow.style.display = (typeSel.value === 'text') ? 'none' : 'block';
+  }
+  toggleFile();
+  typeSel.addEventListener('change', toggleFile);
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  const photoRadio = document.getElementById('type-photo');
+  const videoRadio = document.getElementById('type-video');
+  const fileInput  = document.getElementById('uploadFile');
+  const preview    = document.getElementById('preview');
+  const caption    = document.getElementById('caption');
+  const capCount   = document.getElementById('capCount');
+
+  function updateAccept() {
+    if (!fileInput) return;
+    fileInput.setAttribute('accept', photoRadio && photoRadio.checked ? 'image/' : 'video/');
+    // reset preview on toggle
+    if (preview) {
+      preview.style.display = 'none';
+      preview.innerHTML = '';
+    }
+    if (fileInput) fileInput.value = '';
+  }
+
+  if (photoRadio) photoRadio.addEventListener('change', updateAccept);
+  if (videoRadio) videoRadio.addEventListener('change', updateAccept);
+
+  if (fileInput) {
+    fileInput.addEventListener('change', function () {
+      const file = this.files && this.files[0];
+      if (!preview) return;
+
+      if (!file) {
+        preview.style.display = 'none';
+        preview.innerHTML = '';
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+      preview.style.display = 'block';
+
+      if (photoRadio && photoRadio.checked) {
+        // ✅ template literal with backticks
+        preview.innerHTML = `<img src="${url}" alt="preview">`;
+      } 
+    });
+  }
+
+  if (caption && capCount) {
+    caption.addEventListener('input', function () {
+      capCount.textContent = String(this.value.length);
+    });
+    // init count
+    capCount.textContent = String(caption.value.length);
+  }
+
+  // initial accept & preview state
+  updateAccept();
+})();
+</script>
+
 {% endblock %}

@@ -9,7 +9,7 @@ from accounts.models import AdminProfile
 from colleges.models import College
 from .models import Event
 
-# ---------- Public list you already have (kept) ----------
+# ---------- Public list  ----------
 def events_page(request):
 
     qs = Event.objects.select_related("college").order_by("-date_time", "title")

@@ -15,8 +15,11 @@ urlpatterns = [
     path("admin/reviews/", views.admin_event_reviews_view, name="admin_event_reviews"),
     path("admin/event_ugc/", views.admin_event_ugc_view, name="admin_event_ugc"),
 
-     path("admin/reports/analytics/", views.admin_analytics_view, name="admin_analytics"),
+    path("admin/reports/analytics/", views.admin_analytics_view, name="admin_analytics"),
+    path("event/<str:event_id>/", views.event_detail_view, name="event_detail"),
 
+    path("by-college/<str:college_id>/", views.events_by_college, name="events_by_college"),
 
+    
 
 ]

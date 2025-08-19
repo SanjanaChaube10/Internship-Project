@@ -24,6 +24,7 @@
               <h2 class="ad-card-title">Admin Profile</h2>
               <div class="ad-sub">{{ admin.full_name }} <span class="ad-id">({{ admin.admin_id }})</span></div>
             </div>
+
           </div>
 
         <div class="ad-lines">
@@ -37,6 +38,19 @@
             <div><span class="k">College ID:</span> <span class="v">{{ college.college_id }}</span></div>
             <div><span class="k">College Contact:</span> <span class="v">{{ college.contact_no|default:"—" }}</span></div>
             <div><span class="k">Location:</span> <span class="v">{{ college.location|default:"—" }}</span></div>
+              {# optional tiny preview if a logo exists #}
+  {% if college.logo %}
+    <div style="margin-top:10px;">
+      <img src="{{ college.logo.url }}" alt="College logo"
+           style="height:50px;width:50px;border-radius:50%;object-fit:cover;border:2px solid #eee;">
+    </div>
+  {% endif %}
+
+  <div style="margin-top:10px;">
+    <a href="{% url 'colleges:upload_college_logo' college.college_id %}"
+       class="ad-btn sm">Upload / Update Logo</a>
+  </div>
+
           {% else %}
             <div class="ad-muted">No college linked to this admin.</div>
           {% endif %}

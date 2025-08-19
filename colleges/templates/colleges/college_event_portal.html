@@ -1,39 +1,39 @@
 {% extends "accounts/base.html" %}
 {% load static %}
-
 {% block title %}College Events Portal • Forever Fest{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/colleges.css' %}">
-{% endblock %}
-
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/colleges.css' %}">
 
-<div id="colleges-page" class="page active">
+<section class="col-wrap">
   <header class="portal-header">
     <h1>College Events Portal</h1>
     <p class="subtitle">Select a college to view upcoming events</p>
-  </header>
-
-  <div class="cta-row">
     <a href="{% url 'events:events_page' %}" class="back-button">All College Events →</a>
-  </div>
+  </header>
 
   <div class="grid-container">
     {% for col in colleges %}
-      <a class="college-card" href="{{ col.href }}">
+      <div class="college-card">
         <div class="college-logo">
-          <img src="{{ col.logo }}" alt="{{ col.name }} logo">
+          {# Prefer ImageField .url if present, otherwise fall back to logo_url string #}
+          {% if col.logo %}
+            <img src="{{ col.logo.url }}" alt="{{ col.name }} logo">
+          {% elif col.logo_url %}
+            <img src="{{ col.logo_url }}" alt="{{ col.name }} logo">
+          {% else %}
+            <span class="no-logo">No logo</span>
+          {% endif %}
         </div>
-        <h2 class="college-name">{{ col.name }}</h2>
+
+        <h2 class="college-name">
+          <a href="{% url 'events:events_by_college' college_id=col.college_id %}">{{ col.name }}</a>
+        </h2>
         <p class="college-location">{{ col.location }}</p>
-      </a>
+      </div>
     {% empty %}
       <p>No colleges found.</p>
     {% endfor %}
   </div>
-</div>
-
-<!-- subscribe band + footer are already in your base OR keep your own partials -->
-
+</section>
 {% endblock %}

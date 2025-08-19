@@ -22,11 +22,15 @@ class College(models.Model):
     email       = models.EmailField(max_length=120, blank=True, null=True)
     location    = models.CharField(max_length=120, blank=True, null=True)
 
+   
+
     # one admin ↔ one college
     owner_admin = models.OneToOneField(
     AdminProfile, on_delete=models.CASCADE, related_name='college',
     null=True, blank=True
     )
+
+    logo  = models.ImageField(upload_to="college_logos/",blank=True,null=True)
 
 
     created_at = models.DateTimeField(auto_now_add=True)

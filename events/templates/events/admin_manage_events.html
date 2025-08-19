@@ -30,6 +30,7 @@
               <td>{{ e.title }}</td>
               <td>{{ e.date_time|date:"M d, Y, g:i A" }}</td>
               <td>{{ e.location }}</td>
+              <td>
                 {% if e.image_url %}
                   <img src="{{ e.image_url }}" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:6px;display:block;margin-bottom:4px;">
                   <small class="text-muted" style="display:block;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
@@ -39,7 +40,6 @@
                   <span class="text-muted">—</span>
                 {% endif %}
               </td>
-              <td>
               <td>
                 <a href="{% url 'events:admin_edit_event' e.event_id %}" class="btn-action edit">Edit</a>
                 <form method="post" action="{% url 'events:admin_delete_event' e.event_id %}" class="inline-form">

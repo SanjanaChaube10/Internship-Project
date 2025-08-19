@@ -21,20 +21,30 @@ from accounts.models import UserProfile
 
 # ---------- Public list  ----------
 def events_page(request):
-
     qs = Event.objects.select_related("college").order_by("-date_time", "title")
-    events = [{
-        "event_id": e.event_id,
-        "title": e.title,
-        "college_name": e.college.name if e.college_id else "",
-        "date_time": e.date_time,
-        "location": e.location,
-        "tag": "",           
-        "description": e.description,
-        "image_url": "",     
-    } for e in qs]
-    return render(request, "events/events_page.html", {"events": events})
 
+    events = []
+    for e in qs:
+        # Decide which image field you are using
+        if hasattr(e, "image") and e.image:  # If using ImageField
+            img = e.image.url
+        elif hasattr(e, "image_url") and e.image_url:  # If storing URL
+            img = e.image_url
+        else:
+            img = ""  # fallback
+
+        events.append({
+            "event_id": e.event_id,
+            "title": e.title,
+            "college_name": e.college.name if e.college_id else "",
+            "date_time": e.date_time,
+            "location": e.location,
+            "tag": e.tag if hasattr(e, "tag") else "",
+            "description": e.description,
+            "image_url": img,
+        })
+
+    return render(request, "events/events_page.html", {"events": events})
 
 
 ADMIN_SESSION_KEY = "admin_id"
@@ -129,13 +139,39 @@ def admin_manage_events_view(request):
         return redirect("admin_login")
     admin, college = gate
 
-    # Show events for this admin’s college (owner scope).
-    events = Event.objects.filter(college=college).order_by("-date_time", "title") .only("event_id","title","date_time","location","image_url")
+    # Pull full rows we need; select_related for college label if you show it.
+    qs = (
+        Event.objects
+        .filter(college=college)
+        .select_related("college")
+        .order_by("-date_time", "title")
+    )
+
+    # Build a slim dict per row with a correct image URL
+    rows = []
+    for e in qs:
+        # prefer ImageField url if present; fall back to any string field image_url
+        img = ""
+        if hasattr(e, "image") and e.image:          # ImageField
+            try:
+                img = e.image.url
+            except ValueError:
+                img = ""
+        elif getattr(e, "image_url", ""):            # CharField on the model
+            img = e.image_url
+
+        rows.append({
+            "event_id":  e.event_id,
+            "title":     e.title,
+            "date_time": e.date_time,
+            "location":  e.location,
+            "image_url": img,
+        })
 
     return render(
         request,
         "events/admin_manage_events.html",
-        {"admin": admin, "college": college, "events": events},
+        {"admin": admin, "college": college, "events": rows},
     )
 
 
@@ -396,3 +432,55 @@ def admin_analytics_view(request):
         "rows": rows,
         "popular_event_id": popular_event_id,
     })
+
+# events/views.py
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg, Count
+from .models import Event
+from ugc.models import UGC, Review  # adjust app label if different
+
+def event_detail_view(request, event_id):
+    ev = get_object_or_404(Event, event_id=event_id)
+
+    # Stats
+    ugc_count     = UGC.objects.filter(event=ev).count()
+    reviews_qs    = Review.objects.filter(event=ev)
+    reviews_count = reviews_qs.count()
+    avg_rating    = reviews_qs.aggregate(a=Avg("rating"))["a"] or 0
+
+    context = {
+        "event": ev,
+        "ugc_count": ugc_count,
+        "reviews_count": reviews_count,
+        "avg_rating": avg_rating,
+    }
+    return render(request, "events/event_detail.html", context)
+
+
+from django.shortcuts import render, get_object_or_404
+from colleges.models import College
+from .models import Event
+
+
+
+def events_by_college(request, college_id):
+    college = get_object_or_404(College, college_id=college_id)
+    qs = (Event.objects
+                .select_related("college")
+                .filter(college=college)
+                .order_by("-date_time", "title"))
+
+    # reuse your events card structure
+    events = [{
+        "event_id": e.event_id,
+        "title": e.title,
+        "college_name": e.college.name if e.college_id else "",
+        "date_time": e.date_time,
+        "location": e.location,
+        "tag": e.tag if hasattr(e, "tag") else "",
+        "description": e.description,
+        "image_url": e.image_url or "",
+    } for e in qs]
+
+    return render(request, "events/events_page.html",
+                  {"events": events, "college_name": {college.name}})

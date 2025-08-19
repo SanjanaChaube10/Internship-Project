@@ -25,7 +25,7 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('', include('accounts.urls')),  
     path("colleges/", include("colleges.urls",namespace="colleges")),
-    path("events/", include("events.urls", namespace="events")),
+    path("events/", include(("events.urls", "events"), namespace="events")),
     path("ugc/", include("ugc.urls", namespace="ugc")),
 
 

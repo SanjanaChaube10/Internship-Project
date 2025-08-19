@@ -1,0 +1,48 @@
+{% extends "accounts/base.html" %}
+{% load static%}
+{% block title %}{{ event.title }} — Details{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/event_details.css' %}">
+
+<div class="ed-wrap">
+  <div class="ed-card">
+    <div class="ed-hero">
+      {# image fallback logic you already have #}
+      {% if event.image and event.image.url %}
+        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+      {% elif event.image_url %}
+        <img src="{{ event.image_url }}" alt="{{ event.title }}">
+      {% else %}
+        <img src="https://via.placeholder.com/1200x300.png?text={{ event.title|urlencode }}" alt="{{ event.title }}">
+      {% endif %}
+    </div>
+
+    <div class="ed-body">
+      <h1 class="ed-title">{{ event.title }}</h1>
+
+      <p class="ed-sub">
+        <b>ID:</b> {{ event.event_id }} ·
+        <b>Date:</b> {{ event.date_time|date:"M d, Y, g:i A" }} ·
+        <b>Location:</b> {{ event.location }}
+      </p>
+
+      {% if event.description %}
+        <p class="ed-desc">{{ event.description }}</p>
+      {% endif %}
+
+      <div class="ed-stats">
+        <div class="ed-stat">UGC: <b>{{ ugc_count }}</b></div>
+        <div class="ed-stat">Reviews: <b>{{ reviews_count }}</b></div>
+        <div class="ed-stat">Avg Rating: <b class="ed-star">{% if avg_rating %}★ {{ avg_rating|floatformat:1 }}{% else %}—{% endif %}</b></div>
+      </div>
+
+      <div class="ed-actions">
+        <a href="#" class="btn btn-primary">Register</a>
+        <a href="{% url 'ugc:event_hub' event.event_id %}" class="btn btn-outline-primary">Share &amp; Review</a>
+        <a href="{% url 'events:events_page' %}" class="btn btn-light">Back to Events</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

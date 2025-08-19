@@ -127,3 +127,8 @@ body{ background:var(--bg); color:var(--ink); }
 /* ---- Utilities ---- */
 .ad-muted{ color:var(--muted); }
 :focus-visible{ outline:3px solid var(--ring); outline-offset:2px; border-radius:8px; }
+
+
+
+
+

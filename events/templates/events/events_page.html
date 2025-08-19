@@ -7,13 +7,13 @@
   <div class="events-grid">
     {% for e in events %}
       <div class="event-card">
-        <div class="event-image">
-          {% if e.image_url %}
-            <img src="{{ e.image_url }}" alt="{{ e.title }}">
-          {% else %}
-            <img src="https://via.placeholder.com/400x200.png?text=Event+Image" alt="{{ e.title }}">
-          {% endif %}
-        </div>
+       <div class="event-image">   
+      {% if e.image_url %}
+      <img src="{{ e.image_url }}" alt="{{ e.title }}">
+      {% else %}
+      <img src="https://via.placeholder.com/400x200.png?text=Event+Image" alt="{{ e.title }}">
+      {% endif %}
+       </div>
         <div class="event-details">
           <h4>{{e.event_id}}</h4>
           <h3>{{ e.title }}</h3>
@@ -30,7 +30,7 @@
               <button class="btn-register" disabled title="Registration coming soon">Register</button>
 
             {% endif %}
-            <a href="#" class="btn-details">Details</a>
+            <a href="{% url 'events:event_detail' e.event_id %}" class="btn-details">Details</a>
             <a class="btn-secondary" href="{% url 'ugc:event_hub' e.event_id %}">Share & Review </a>
           </div>
         </div>

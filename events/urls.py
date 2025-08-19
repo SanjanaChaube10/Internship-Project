@@ -12,4 +12,11 @@ urlpatterns = [
     path("admin/events/<str:event_id>/edit/", views.admin_edit_event_view, name="admin_edit_event"),
     path("admin/events/<str:event_id>/delete/", views.admin_delete_event_view, name="admin_delete_event"),
 
+    path("admin/reviews/", views.admin_event_reviews_view, name="admin_event_reviews"),
+    path("admin/event_ugc/", views.admin_event_ugc_view, name="admin_event_ugc"),
+
+     path("admin/reports/analytics/", views.admin_analytics_view, name="admin_analytics"),
+
+
+
 ]

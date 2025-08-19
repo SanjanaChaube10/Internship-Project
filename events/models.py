@@ -31,6 +31,7 @@ def generate_sponsor_id():
 
 # ---------- Core tables ----------
 class Event(models.Model):
+    image_url = models.CharField(max_length=255, blank=True)
     event_id = models.CharField(primary_key=True, max_length=20, default=generate_event_id)
     college = models.ForeignKey(College,to_field="college_id", db_column="college_id",on_delete=models.CASCADE, related_name="events",)
     title = models.CharField(max_length=80)

@@ -7,7 +7,7 @@
 
 <div class="event-card">
   <h2 class="form-title">✏ Edit Event – {{ event.event_id }}</h2>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group">
       <label for="title">Title</label>
@@ -30,6 +30,14 @@
       <label for="location">Location</label>
       <input id="location" name="location" class="form-control" value="{{ event.location }}" required>
     </div>
+
+     <!-- NEW: image file -->
+    <div class="form-group">
+      <label for="id_image">Event Image</label>
+      <input type="file" id="id_image" name="image" class="form-control" accept="image/*">
+      <small class="ud-note"> JPG/PNG/WebP works great.</small>
+    </div>
+
 
     <div class="btn-row">
       <button class="btn-save" type="submit">Save</button>

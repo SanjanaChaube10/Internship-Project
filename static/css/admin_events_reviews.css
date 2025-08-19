@@ -1,0 +1,44 @@
+:root{
+  --bg:#fbf8ff; --card:#fff; --ink:#2b2240; --muted:#7a6d99;
+  --line:#ece7f7; --brand:#7b3fe4; --shadow:0 10px 28px rgba(34,18,51,.08);
+  --radius:16px;
+}
+body{ background:var(--bg); color:var(--ink); }
+
+.container{
+  max-width:1100px; margin:0 auto; padding:36px 18px 64px;
+}
+
+h2{ margin:0 0 12px; font-size:clamp(22px,3vw,34px); font-weight:800; }
+
+.card{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+}
+.card-body{ padding:22px; }
+
+.table-responsive{ overflow-x:auto; }
+
+/* Kill the tiny “hairline” above first cell */
+.table{ width:100%; border-collapse:separate; border-spacing:0; font-size:.96rem; }
+.table thead th{
+  background:#f6f3ff; color:#4b3a7a; font-weight:700;
+  border-bottom:1px solid var(--line); padding:14px 16px;
+}
+.table td{ padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:middle; }
+.table tbody tr:hover{ background:#fbf9ff; }
+
+.table thead th:first-child{ border-top-left-radius:12px; }
+.table thead th:last-child { border-top-right-radius:12px; }
+.table tr:last-child td:first-child{ border-bottom-left-radius:12px; }
+.table tr:last-child td:last-child { border-bottom-right-radius:12px; }
+
+.rating{ font-weight:800; color:#ff9800; }
+.text-muted{ color:var(--muted)!important; }
+.nowrap{ white-space:nowrap; }
+.w-120{ width:120px; }
+
+@media (max-width:720px){
+  .card-body{ padding:18px; }
+  .table th,.table td{ padding:12px; }
+}

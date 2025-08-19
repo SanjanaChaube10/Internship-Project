@@ -1,0 +1,48 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Event UGC{% endblock %}
+
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin_event_ugc.css' %}">
+
+<section class="ad-wrap">
+  <div class="container">
+    <h2 class="ad-title">Event UGC — {{ college.name }}</h2>
+
+    <div class="au-grid">
+      {% for post in ugc_posts %}
+        <article class="au-card">
+          <div class="au-thumb-wrap">
+            {% with photo=post.photos.all.0 %}
+              {% if photo %}
+                <img src="{{ photo.image_url }}" alt="UGC photo" class="au-thumb">
+              {% else %}
+                <div class="au-thumb au-thumb--empty">No photo</div>
+              {% endif %}
+            {% endwith %}
+          </div>
+
+          <div class="au-body">
+            <div class="au-event">{{ post.event.title }}</div>
+
+            <div class="au-meta">
+              <div><strong>User ID:</strong> {{ post.user.user_id }}</div>
+              <div><strong>Username:</strong> {{ post.user.username }}</div>
+              <div><strong>Date:</strong> {{ post.posted_on|date:"M d, Y" }}</div>
+            </div>
+
+            <div class="au-caption">
+              {{ post.content_data|default:"(no caption)" }}
+            </div>
+          </div>
+        </article>
+      {% empty %}
+        <p class="ad-muted">No UGC yet for your college’s events.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

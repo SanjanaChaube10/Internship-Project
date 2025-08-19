@@ -37,11 +37,13 @@
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   overflow: hidden;
+  
 }
 
 .styled-table {
   width: 100%;
   border-collapse: collapse;
+  
 }
 
 .styled-table th,
@@ -50,11 +52,14 @@
   text-align: left;
   border-bottom: 1px solid #eee;
   font-size: 0.95rem;
+  
 }
 
-.styled-table th {
+.styled-table thead th {
   background-color: #f9f9f9;
   font-weight: 600;
+  border-top:none;
+  
 }
 
 .styled-table tr:hover {

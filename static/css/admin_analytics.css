@@ -1,0 +1,44 @@
+:root{
+  --bg:#fbf8ff; --card:#fff; --ink:#2b2240; --muted:#7a6d99;
+  --brand:#7b3fe4; --accent:#efe7ff; --ring:rgba(123,63,228,.25);
+  --shadow:0 10px 24px rgba(34,18,51,.08);
+  --radius:18px;
+}
+body{ background:var(--bg); color:var(--ink); }
+
+.ana-wrap{ padding:28px 0 56px; }
+.ana-container{ max-width:1100px; margin:0 auto; padding:0 16px; }
+
+.ana-page-title{
+  margin:0 0 16px; font-weight:900; letter-spacing:.3px;
+  font-size: clamp(22px, 2.6vw, 32px);
+}
+
+.ana-card{
+  background: linear-gradient(180deg,#ffffffcc,#fffffffa) padding-box,
+              radial-gradient(120% 120% at 0 0,#f6f0ff,#ffffff) border-box;
+  border:1px solid var(--accent);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+
+.ana-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.ana-table th, .ana-table td{
+  padding:14px 16px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  font-size:15px;
+}
+.ana-table thead th{
+  background:#faf7ff;
+  font-weight:800;
+  color:#4b3a75;
+}
+.ana-table tr:hover td{ background:#fcfbff; }
+.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#5d41b2; }
+.bold{ font-weight:800; }
+.empty{ text-align:center; color:var(--muted); }

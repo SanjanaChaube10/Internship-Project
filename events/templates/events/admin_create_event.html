@@ -9,7 +9,7 @@
 <div class="d-flex justify-content-center align-items-center min-vh-100">
   <div class="event-card">
   <h2>✨ Create Event ✨</h2>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
     <div class="form-group">
@@ -33,6 +33,14 @@
         <label for="id_location">Location</label>
         <input type="text" id="id_location" name="location" class="form-control" placeholder="Auditorium, Mumbai camp">
       </div>
+
+       <!-- NEW: image file -->
+      <div class="form-group">
+      <label for="id_image">Event Image</label>
+      <input type="file" id="id_image" name="image" class="form-control" accept="image/*">
+      <small class="ud-note">JPG/PNG/WebP works great.</small>
+       </div>
+
      <br>
     <div class="btn-row"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;&nbsp; &nbsp; 
       <button type="submit" class="btn btn-primary">Create</button>

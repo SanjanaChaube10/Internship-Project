@@ -1,0 +1,50 @@
+{# templates/events/admin_event_reviews.html #}
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Event Reviews{% endblock %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin_events_reviews.css' %}">
+
+<div class="container">
+  <h2>Event Reviews{% if college %} — {{ college.name|lower }}{% endif %}</h2>
+
+  <div class="card">
+    <div class="card-body">
+      {% if reviews %}
+        <div class="table-responsive">
+          <table class="table styled-table">
+            <thead>
+              <tr>
+                <th class="nowrap">Event ID</th>
+                <th>Title</th>
+                <th class="w-120 text-center">Rating</th>
+                <th>Comment</th>
+                <th class="nowrap">Date</th>
+                <th class="nowrap">User ID</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in reviews %}
+                <tr>
+                  <td class="fw-semibold">{{ r.event.event_id }}</td>
+                  <td>{{ r.event.title }}</td>
+                  <td class="text-center rating">★ {{ r.rating }}/5</td>
+                  <td>{{ r.comment|default:"—" }}</td>
+                  <td class="nowrap text-muted">{{ r.date_posted|date:"M d, Y" }}</td>
+                  <td class="nowrap">{{ r.user.user_id }}</td>
+                  <td>{{ r.user.username }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">No reviews yet for your college’s events.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

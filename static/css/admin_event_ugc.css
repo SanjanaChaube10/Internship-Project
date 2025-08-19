@@ -1,0 +1,49 @@
+/* static/css/admin_event_ugc.css */
+:root{
+  --ink:#2b2240; --muted:#7a6d99; --card:#fff; --ring:rgba(123,63,228,.25);
+  --accent:#efe9ff; --shadow:0 8px 24px rgba(34,18,51,.08);
+}
+
+.ad-wrap{ padding:28px 0 48px; }
+.ad-title{ font-weight:800; margin:0 0 18px; }
+.ad-muted{ color:var(--muted); }
+
+.au-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap:18px;
+}
+
+.au-card{
+  background: var(--card);
+  border:1px solid var(--accent);
+  border-radius:16px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.au-thumb-wrap{
+  background:#faf7ff;
+  border-bottom:1px solid var(--accent);
+}
+
+.au-thumb{
+  display:block;
+  width:100%;
+  height:220px;
+  object-fit:cover;         /* ensures the photo is visible & fills the header */
+}
+
+.au-thumb--empty{
+  display:grid; place-items:center;
+  width:100%; height:220px;
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+.au-body{ padding:12px 14px 14px; }
+.au-event{ font-weight:800; margin-bottom:6px; }
+.au-meta{ font-size:.9rem; color:var(--muted); display:grid; gap:2px; margin-bottom:8px; }
+.au-caption{ color:var(--ink); }

@@ -31,8 +31,10 @@
     <a href="{% url 'events:admin_manage_events' %}">Manage Events</a>
     <a href="">Registrations (Update)</a>
     <a href="{% url 'events:sponsorship_hub' %}">Sponsorship</a>
-    <a href="">Insights / Analytics</a>
-    <a href="">Event Reviews</a>
+    <a href="{% url 'events:admin_analytics' %}">Insights / Analytics</a>
+    <a href="{% url 'events:admin_event_reviews' %}">Event Reviews</a>
+    <a href="{% url 'events:admin_event_ugc' %}">Event Ugc</a>
+
     <hr>
     <a href="{% url 'admin_logout' %}" class="logout-link">Logout</a>
 

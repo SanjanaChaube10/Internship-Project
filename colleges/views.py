@@ -13,6 +13,29 @@ def college_event_portal(request):
     return render(request, "colleges/college_event_portal.html", {"colleges": colleges})
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import College
+from events.models import Event  
+
+def college_detail(request, college_id):
+    """
+    Show one college with its basic info and events.
+    Use college_id (e.g., 'TCOL_0007'). If your PK is int, switch converter in urls.
+    """
+    college = get_object_or_404(College, college_id=college_id)
+
+    try:
+        events_qs = college.events.all()        # if Event FK uses related_name='events'
+    except Exception:
+        events_qs = Event.objects.filter(college=college)  # fallback
+
+    context = {
+        "college": college,
+        "events": events_qs.order_by("date_time")  # adjust field name if needed
+    }
+    return render(request, "colleges/college_detail.html", context)
+
+
 
 ADMIN_SESSION_KEY = "admin_id"  # this is what you set on admin login
 

@@ -1,0 +1,38 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 900px; margin: 0 auto;">
+  <h2 class="mb-4">Search results for: <em>{{ q }}</em></h2>
+
+  {% if colleges %}
+    <h3>Colleges</h3>
+    <div class="list-group mb-4">
+      {% for c in colleges %}
+        <a href="{% url 'colleges:college_detail' c.college_id %}" class="list-group-item list-group-item-action">
+          {{ c.name }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+  {% if events %}
+    <h3>Events</h3>
+    <div class="list-group mb-4">
+      {% for e in events %}
+        <a href="{% url 'events:event_detail' e.event_id %}" class="list-group-item list-group-item-action">
+          {{ e.title }}
+          <small class="text-muted"> — {{ e.college.name }}</small>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if not colleges and not events %}
+    <p class="text-muted">No results found. Try another search.</p>
+  {% endif %}
+</div>
+{% endblock %}

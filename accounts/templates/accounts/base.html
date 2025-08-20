@@ -72,14 +72,20 @@
             <a href="">About Us</a>
             <a href="">Contact</a>
         </nav>
-
-          <form class="search-bar" method="get" action="" id="searchForm" autocomplete="off">
-          <input type="text" name="q" id="searchInput" placeholder="Search colleges…" >
-          <button type="submit" aria-label="Search">
-          <i class="fas fa-search"></i>
-          </button>
-          <div class="search-suggest" id="searchSuggest" hidden></div>
-          </form>
+<form class="search-bar" method="get" action="{% url 'search' %}" id="searchForm" autocomplete="off">
+  <input
+    type="text"
+    name="q"
+    id="searchInput"
+    placeholder="Search colleges or events…"
+    hx-get="{% url 'search_suggest' %}"
+    hx-trigger="keyup changed delay:300ms"
+    hx-target="#searchSuggest"
+    hx-swap="innerHTML"
+  >
+  <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+</form>
+<div class="search-suggest" id="searchSuggest"></div>
 
         <div class="right-section">
          <div class="nav-buttons">

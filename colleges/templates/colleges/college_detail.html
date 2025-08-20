@@ -1,0 +1,47 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}{{ college.name }} — College{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; margin: 0 auto; padding: 24px 16px;">
+  <header style="display:flex; gap:16px; align-items:center; margin-bottom:16px;">
+    {% if college.logo %}
+      <img src="{{ college.logo.url }}" alt="{{ college.name }}" style="width:72px;height:72px;object-fit:cover;border-radius:12px;">
+    {% endif %}
+    <div>
+      <h1 style="margin:0;">{{ college.name }}</h1>
+      <p style="margin:4px 0 0; color:#666;">
+        {{ college.location }}{% if college.email %} • {{ college.email }}{% endif %}{% if college.contact_no %} • {{ college.contact_no }}{% endif %}
+      </p>
+    </div>
+  </header>
+
+  <section style="margin-bottom:20px;">
+    <h3>About</h3>
+    <p>{{ college.description|default:"No description available." }}</p>
+  </section>
+
+  <section>
+    <h3>Events by {{ college.name }}</h3>
+    {% if events %}
+      <div style="display:grid; gap:12px;">
+        {% for e in events %}
+          <div style="border:1px solid #eee; border-radius:12px; padding:12px;">
+            <h4 style="margin:0 0 4px;">
+              <a href="{% url 'events:event_detail' e.event_id %}">{{ e.title }}</a>
+            </h4>
+            <p style="margin:0; color:#666;">
+              {{ e.date_time|date:"M d, Y, g:i A" }}
+            </p>
+            {% if e.description %}
+              <p style="margin:8px 0 0; color:#444;">{{ e.description|truncatechars:160 }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No events listed yet.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

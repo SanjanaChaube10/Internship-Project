@@ -358,4 +358,26 @@ def home_view(request):
     })
 
 
+from django.shortcuts import render
+from django.db.models import Q
+from colleges.models import College
+from events.models import Event
+from django.http import HttpResponse
 
+def search(request):
+    q = request.GET.get("q", "").strip()
+    colleges = events = []
+    if q:
+        colleges = College.objects.filter(name__icontains=q)
+        events = Event.objects.filter(Q(title__icontains=q) | Q(description__icontains=q))
+    return render(request, "accounts/search_result.html", {"q": q, "colleges": colleges, "events": events})
+
+
+
+def search_suggest(request):
+    q = request.GET.get("q", "").strip()
+    colleges = events = []
+    if q:
+        colleges = College.objects.filter(name__icontains=q)[:5]
+        events = Event.objects.filter(title__icontains=q)[:5]
+    return render(request, "accounts/search_suggest.html", {"colleges": colleges, "events": events})

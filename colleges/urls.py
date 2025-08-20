@@ -5,6 +5,7 @@ app_name = "colleges"
 
 urlpatterns = [
     path("college-event-portal", views.college_event_portal, name="college_event_portal"),
+     path("<str:college_id>/", views.college_detail, name="college_detail"),
     path("<str:college_id>/upload-logo/", views.upload_college_logo, name="upload_college_logo"),
 
 ]

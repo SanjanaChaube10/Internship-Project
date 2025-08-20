@@ -1,0 +1,27 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Search Suggest{% endblock %}
+
+{% block content %}
+
+{% if colleges or events %}
+  <ul class="suggest-list">
+    {% for c in colleges %}
+      <li>
+        <a href="{% url 'colleges:college_detail' c.college_id %}">
+          <strong>{{ c.name }}</strong> <small>(College)</small>
+        </a>
+      </li>
+    {% endfor %}
+    {% for e in events %}
+      <li>
+        <a href="{% url 'events:event_detail' e.event_id %}">
+          {{ e.title }} <small>(Event)</small>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="text-muted px-2">No suggestions</p>
+{% endif %}

@@ -18,17 +18,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts.views import home_view  
-
+from accounts.views import search, search_suggest
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
+       # 🔎 search endpoints MUST come before the empty-prefix includes
+    path('search/', search, name='search'),
+    path('search/suggest/', search_suggest, name='search_suggest'),
+
     path('', include('accounts.urls')),  
     path("colleges/", include("colleges.urls",namespace="colleges")),
     path("events/", include(("events.urls", "events"), namespace="events")),
     path("ugc/", include("ugc.urls", namespace="ugc")),
     path("registrations/", include(("registrations.urls", "registrations"), namespace="registrations")),
-
 
 ]
 

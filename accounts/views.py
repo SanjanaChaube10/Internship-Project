@@ -341,8 +341,21 @@ def admin_logout(request):
     messages.success(request, "Admin logged out.")
     return redirect("admin_login")
 
+# accounts/views.py (or your home app's views)
+from django.shortcuts import render
+from django.utils import timezone
+from events.models import Event
+
 def home_view(request):
-    return render(request, "accounts/home.html")  # this looks for templates/home.html
+    # If your model has date_time
+    qs = Event.objects.filter(date_time__gte=timezone.now()).order_by('date_time')[:8]
+
+    # If instead you have start/end dates, use this:
+    # qs = Event.objects.filter(start_date__gte=timezone.now().date()).order_by('start_date')[:8]
+
+    return render(request, "accounts/home.html", {
+        "upcoming_events": qs,
+    })
 
 
 

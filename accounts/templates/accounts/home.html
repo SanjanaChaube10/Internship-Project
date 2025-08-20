@@ -31,58 +31,65 @@
     </div>
   </section>
 
-  <!-- Upcoming Events -->
-  <section class="upcoming-events">
-    <h1>Upcoming Events</h1>
-    <p>Join these exciting events happening soon across Mumbai colleges</p>
 
+
+<!-- Upcoming Events -->
+<section class="upcoming-events">
+  <h1>Upcoming Events</h1>
+  <p>Join these exciting events happening soon across Mumbai colleges</p>
+
+  {% if upcoming_events %}
     <div class="event-cards">
-      <!-- Event 1 -->
-      <div class="event-card">
-        <img src="{% static 'image/kshijit.png' %}" alt="Goonj 2025-26" />
-        <h2>Kshijit 2025-26</h2>
-        <p><h5>24 - 25 Jan 2025</h5></p>
-        <b>Mithibai College</b>
-        <p class="desc"><h6>
-          It is an international intercollegiate cultural festival, considered one of the biggest college festivals in Asia.</h6>
-        </p>
-      </div>
+      {% for e in upcoming_events %}
+        <a class="event-card" href="{% url 'events:event_detail' e.event_id %}">
+          <img
+            src="{% if e.image_url %}{{ e.image_url }}{% elif e.image %}{{ e.image.url }}{% else %}{% static 'image/placeholder-event.png' %}{% endif %}"
+            alt="{{ e.title }}"
+          />
 
-      <!-- Event 2 -->
-      <div class="event-card">
-        <img src="{% static 'image/fiesta.png' %}" alt="Fiesta 2025-26" />
-        <h2>Fiesta 2025-26</h2>
-        <p><h5>18 - 20 Jan 2025</h5></p>
-        <b>Thakur Polytechnic</b>
-        <p class="desc"><h6>
-          This event is an extraordinary gathering that brings together business
-          development...</h6>
-        </p>
-      </div>
+          <h2>{{ e.title }}</h2>
 
-      <!-- Event 3 -->
-      <div class="event-card">
-        <img src="{% static 'image/malhar2.png' %}" alt="Malhar 2025-26" />
-        <h2>Malhar 2025-26</h2>
-        <p><h5>24 - 28 Aug 2025</h5></p>
-        <b>St. Xavier's College</b>
-        <p class="desc"><h6>
-          Malhar features a diverse range of events, including cultural contests in literary, performing arts, and fine arts categories, along with various workshops.</h6>
-        </p>
-      </div>
+          {# Date range or single date #}
+          <p>
+            <h5>
+              {% if e.start_date and e.end_date %}
+                {{ e.start_date|date:"d M Y" }} – {{ e.end_date|date:"d M Y" }}
+              {% elif e.date_time %}
+                {{ e.date_time|date:"d M Y" }}
+              {% else %}
+                Date TBA
+              {% endif %}
+            </h5>
+          </p>
 
-      <!-- Event 4 -->
-      <div class="event-card">
-        <img src="{% static 'image/nm techfest.png' %}" alt="Fiesta 2025-26" />
-        <h2>NM TechFest 2025-26</h2>
-        <p><h5>18 - 24 Nov 2025</h5></p>
-        <b>NMIMS Mumbai</b>
-        <p class="desc"><h6>
-          NM TechFest refers to the FinTech and Gaming Festival organized by Narsee Monjee College of Commerce and Economics in Mumbai.</h6>
-        </p>
-      </div>
+          <b>
+            {% if e.college and e.college.name %}
+              {{ e.college.name }}
+            {% elif e.college_name %}
+              {{ e.college_name }}
+            {% else %}
+              —
+            {% endif %}
+          </b>
+
+          <p class="desc">
+            <h6>
+              {% if e.short_description %}{{ e.short_description }}
+              {% elif e.description %}{{ e.description|truncatechars:140 }}
+              {% else %}Details coming soon…
+              {% endif %}
+            </h6>
+          </p>
+        </a>
+      {% endfor %}
     </div>
-  </section>
+  {% else %}
+    <div class="empty-state" style="text-align:center;padding:32px 12px;">
+      <h3>No upcoming events right now.</h3>
+      <p class="muted">Check back later—new events are added regularly.</p>
+    </div>
+  {% endif %}
+</section>
 
   <!-- Why Choose Us -->
   <section class="why-choose">

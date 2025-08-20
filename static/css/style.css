@@ -1879,8 +1879,9 @@ footer {
   flex-wrap: wrap;
   gap: 24px;
   width: 100%;
+ 
 }
-.event-card{ flex: 1 1 260px; max-width: 370px; }
+.event-card{ flex: 1 1 260px; max-width: 500px; }
 */
 
 /* Card */
@@ -1890,7 +1891,7 @@ footer {
   box-shadow:0 4px 12px rgba(0,0,0,.08);
   overflow:hidden;
   transition:transform .2s ease, box-shadow .2s ease;
-  max-width: 370px;
+  max-width: 500px;
 }
 
 .event-card:hover{
@@ -1952,6 +1953,7 @@ footer {
   font-weight:600;
   font-size:.9rem;
   text-decoration:none;
+  height: 80px;
 }
 .btn-register{ background:#482a79; color:#fff; }
 .btn-register:hover{ background:#5f4885; }

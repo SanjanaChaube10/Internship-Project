@@ -1880,7 +1880,7 @@ footer {
   gap: 24px;
   width: 100%;
 }
-.event-card{ flex: 1 1 260px; max-width: 365px; }
+.event-card{ flex: 1 1 260px; max-width: 370px; }
 */
 
 /* Card */
@@ -1890,6 +1890,7 @@ footer {
   box-shadow:0 4px 12px rgba(0,0,0,.08);
   overflow:hidden;
   transition:transform .2s ease, box-shadow .2s ease;
+  max-width: 370px;
 }
 
 .event-card:hover{

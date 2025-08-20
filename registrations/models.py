@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from events.models import Event
+from accounts.models import UserProfile
 
 User = get_user_model()  #  Import actual user model
 
@@ -45,7 +46,7 @@ def generate_payment_id():
 # ---------- Core tables ----------
 class Registration(models.Model):
     registration_id = models.CharField(primary_key=True, max_length=20, default=generate_registration_id)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="registrations")
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="registrations")
     event = models.ForeignKey(Event, to_field="event_id", db_column="event_id",on_delete=models.CASCADE, related_name="registrations")
     payment_status = models.CharField(max_length=30, blank=True)
     registration_date = models.DateField(auto_now_add=True)

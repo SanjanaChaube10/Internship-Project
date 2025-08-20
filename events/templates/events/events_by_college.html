@@ -39,7 +39,7 @@
 
             <div class="actions">
               {% if e.event_id %}
-                <a href="#" class="btn-register">Register</a>
+               <a href="{% url 'registrations:register_event' e.event_id %}" class="btn btn-primary">  Register</a>
               {% else %}
                 <button class="btn-register" disabled title="Registration coming soon">Register</button>
               {% endif %}

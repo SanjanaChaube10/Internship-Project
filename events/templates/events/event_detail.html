@@ -38,7 +38,7 @@
       </div>
 
       <div class="ed-actions">
-        <a href="#" class="btn btn-primary">Register</a>
+        <a href="{% url 'registrations:register_event' event.event_id %}" class="btn btn-primary">Register</a>
         <a href="{% url 'ugc:event_hub' event.event_id %}" class="btn btn-outline-primary">Share &amp; Review</a>
         <a href="{% url 'events:events_page' %}" class="btn btn-light">Back to Events</a>
       </div>

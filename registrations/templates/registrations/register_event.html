@@ -1,0 +1,160 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Register — {{ event.title }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/registrations.css' %}">
+
+<section class="reg-wrap">
+  <div class="reg-card">
+    <header class="reg-card__header">
+      <h1>Register for <span>{{ event.title }}</span></h1>
+      <p class="muted">{{ event.college.name }} • {{ event.date_time|date:"M d, Y, g:i A" }}</p>
+    </header>
+
+    <form method="post" class="reg-form" id="registrationForm">
+      {% csrf_token %}
+
+      <!-- Choose Plan -->
+      <div class="field">
+        <label for="plan">Plan</label>
+        <select id="plan" name="plan" required>
+          <option value="">Select a plan</option>
+          <option value="BASIC" data-price="500">Basic — ₹500</option>
+          <option value="PREMIUM" data-price="1000">Premium — ₹1000</option>
+          <option value="VIP" data-price="2000">VIP — ₹2000</option>
+        </select>
+      </div>
+
+      <!-- Payment -->
+      <div class="grid-2">
+        <div class="field">
+          <label for="payment_method">Payment Method</label>
+          <select id="payment_method" name="payment_method" required>
+            <option value="">Select payment method</option>
+            <option value="UPI">UPI</option>
+            <option value="CARD_CREDIT">Credit Card</option>
+            <option value="CARD_DEBIT">Debit Card</option>
+          </select>
+        </div>
+
+        <div class="field" id="upiField" style="display:none;">
+          <label for="upi_id">UPI ID</label>
+          <input type="text" id="upi_id" name="upi_id" placeholder="name@bank">
+        </div>
+      </div>
+
+      <div class="grid-3" id="cardRow" style="display:none;">
+        <div class="field">
+          <label for="card_number">Card Number</label>
+          <input type="text" id="card_number" name="card_number" inputmode="numeric" maxlength="19" placeholder="XXXX XXXX XXXX XXXX">
+        </div>
+        <div class="field">
+          <label for="expiry">Expiry (MM/YYYY)</label>
+          <input type="month" id="expiry" name="expiry">
+          <small class="help" id="expiryHelp" style="display:none;">Expiry can’t be in the past.</small>
+        </div>
+        <div class="field">
+          <label for="cvv">CVV</label>
+          <input type="password" id="cvv" name="cvv" maxlength="4" inputmode="numeric">
+        </div>
+      </div>
+
+      <!-- Invoice preview -->
+      <div class="preview" id="invoicePreview" style="display:none;">
+        <div><strong>Plan:</strong> <span id="pv-plan"></span></div>
+        <div><strong>Method:</strong> <span id="pv-method"></span></div>
+        <div><strong>Amount:</strong> ₹<span id="pv-amount"></span></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" type="submit">Register & Pay</button>
+        <a class="btn-ghost" href="{% url 'events:event_detail' event.event_id %}">Back to event</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  // --- brand helpers
+  const planEl   = document.getElementById('plan');
+  const methodEl = document.getElementById('payment_method');
+  const upiField = document.getElementById('upiField');
+  const cardRow  = document.getElementById('cardRow');
+  const invoice  = document.getElementById('invoicePreview');
+
+  const pvPlan   = document.getElementById('pv-plan');
+  const pvMethod = document.getElementById('pv-method');
+  const pvAmt    = document.getElementById('pv-amount');
+
+  // Prevent past month on card expiry
+  const expiry = document.getElementById('expiry');
+  (function setMinMonth(){
+    const now  = new Date();
+    const yyyy = now.getFullYear();
+    const mm   = String(now.getMonth()+1).padStart(2,'0');
+    const min  = `${yyyy}-${mm}`;
+    expiry.min = min;
+  })();
+
+  function updateVisibility() {
+    const m = methodEl.value;
+    // Toggle fields
+    if (m === 'UPI') {
+      upiField.style.display = '';
+      cardRow.style.display  = 'none';
+      // clear card inputs
+      document.getElementById('card_number').value='';
+      expiry.value='';
+      document.getElementById('cvv').value='';
+    } else if (m === 'CARD_CREDIT' || m === 'CARD_DEBIT') {
+      upiField.style.display = 'none';
+      cardRow.style.display  = '';
+      // clear upi
+      document.getElementById('upi_id').value='';
+    } else {
+      upiField.style.display = 'none';
+      cardRow.style.display  = 'none';
+    }
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const opt = planEl.options[planEl.selectedIndex] || {};
+    const planName = (opt.text || '').split(' — ')[0] || '';
+    const price = opt.dataset ? (opt.dataset.price || '') : '';
+    const method = methodEl.value.replace('CARD_','Card ').replace('_',' ').trim();
+
+    if (planName && price && method) {
+      pvPlan.textContent   = planName;
+      pvMethod.textContent = method || '';
+      pvAmt.textContent    = price;
+      invoice.style.display = '';
+    } else {
+      invoice.style.display = 'none';
+    }
+  }
+
+  planEl.addEventListener('change', updatePreview);
+  methodEl.addEventListener('change', updateVisibility);
+
+  // Validate expiry not in the past on submit
+  document.getElementById('registrationForm').addEventListener('submit', function(e){
+    const m = methodEl.value;
+    if (m === 'CARD_CREDIT' || m === 'CARD_DEBIT') {
+      if (expiry.value) {
+        const now  = new Date();
+        const [yy, mm] = expiry.value.split('-').map(Number);
+        const chosen = new Date(yy, mm-1, 1);
+        const floorNow = new Date(now.getFullYear(), now.getMonth(), 1);
+        if (chosen < floorNow) {
+          e.preventDefault();
+          document.getElementById('expiryHelp').style.display = '';
+          expiry.focus();
+          return false;
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

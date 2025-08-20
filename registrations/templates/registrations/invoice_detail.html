@@ -1,0 +1,67 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Invoice {{ invoice.invoice_id }}{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/registrations.css' %}">
+
+<section class="reg-wrap">
+  <div class="reg-card">
+    <header class="reg-card__header">
+      <h1>Invoice <span>{{ invoice.invoice_id }}</span></h1>
+      <p class="muted">Issued {{ invoice.issued_date }}</p>
+    </header>
+
+    <div class="invoice-block">
+      <div class="row">
+        <div class="col">
+          <div class="label">Event</div>
+          <div class="value">{{ invoice.registration.event.title }} ({{ invoice.registration.event.event_id }})</div>
+        </div>
+
+        <div class="col">
+          <div class="label">Registrant</div>
+          <div class="value">{{ invoice.registration.user.username }} — {{ invoice.registration.user.email }}</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="label">Status</div>
+          {% if invoice.payment.status %}
+            <div class="chip {% if invoice.payment.status|lower == 'paid' %}chip--ok{% else %}chip--warn{% endif %}">
+              {{ invoice.payment.status|title }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="col">
+          <div class="label">Gateway</div>
+          <div class="value">{{ invoice.payment.gateway|upper }}</div>
+        </div>
+      </div>
+
+      <div class="row total">
+        <div class="col">
+          <div class="label">Amount</div>
+          <div class="value">₹ {{ invoice.payment.amount }}</div>
+        </div>
+      </div>
+
+      {% if invoice.details %}
+      <div class="row">
+        <div class="col">
+          <div class="label">Details</div>
+          <div class="value">{{ invoice.details }}</div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="actions">
+      <a href="{% url 'events:event_detail' invoice.registration.event.event_id %}" class="btn-ghost">
+        Back to event
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

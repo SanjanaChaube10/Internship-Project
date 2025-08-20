@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import  login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib import messages
 from .models import AdminProfile

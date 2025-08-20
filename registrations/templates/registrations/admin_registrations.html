@@ -1,0 +1,102 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block title %}Registrations — {{ college.name }}{% endblock %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/registrations.css' %}">
+<div class="reg-wrap">
+  <header class="reg-header">
+    <h1 class="reg-title">Registrations — {{ college.name }}</h1>
+    <p class="reg-sub">All registrations, payments and invoices for your college events.</p>
+  </header>
+
+  <!-- Stats row -->
+  <div class="reg-grid">
+    <div class="reg-card reg-metric">
+      <div class="metric-label">Total Registrations</div>
+      <div class="metric-value">{{ stats.total_regs|default:0 }}</div>
+    </div>
+    <div class="reg-card reg-metric">
+      <div class="metric-label">Paid</div>
+      <div class="metric-value">{{ stats.paid_regs|default:0 }}</div>
+    </div>
+    <div class="reg-card reg-metric">
+      <div class="metric-label">Revenue</div>
+      <div class="metric-value">₹ {{ stats.total_revenue|default:0|floatformat:0 }}</div>
+    </div>
+  </div>
+
+  <!-- By event summary -->
+  {% if by_event %}
+  <div class="reg-card">
+    <h3 class="card-title">By Event</h3>
+    <div class="table-wrap">
+      <table class="reg-table">
+        <thead>
+          <tr>
+            <th>Event</th><th>Regs</th><th>Paid</th><th>Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for e in by_event %}
+          <tr>
+            <td>{{ e.event__title }} </td>
+            <td>{{ e.regs|default:0 }}</td>
+            <td>{{ e.paid|default:0 }}</td>
+            <td>₹ {{ e.revenue|default:0|floatformat:0 }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- All registrations -->
+   <br> <br>
+  <div class="reg-card">
+    <h3 class="card-title">All Registrations</h3>
+    {% if rows %}
+    <div class="table-wrap">
+      <table class="reg-table">
+        <thead>
+          <tr>
+            <th>Reg ID</th>
+            <th>When</th>
+            <th>Student</th>
+            <th>Event</th>
+            <th>Status</th>
+            <th>Invoice</th>
+            <th>Payment</th>
+            <th>Amount</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rows %}
+          <tr>
+            <td>{{ r.reg_id }}</td>
+            <td>{{ r.date|date:"M d, Y" }}</td>
+            <td>{{ r.user.username }} <small class="muted">— {{ r.user.email }}</small></td>
+            <td>{{ r.event_title }} <small class="muted">({{ r.event_id }})</small></td>
+            <td>{{ r.status|default:"-"|title }}</td>
+            <td>{% if r.invoice_id %}{{ r.invoice_id }}{% else %}<span class="muted">—</span>{% endif %}</td>
+            <td>{% if r.pay_status %}{{ r.pay_status|title }} / {{ r.gateway|upper }}{% else %}<span class="muted">—</span>{% endif %}</td>
+            <td>₹ {{ r.amount|default:0|floatformat:0 }}</td>
+            <td>
+              {% if r.invoice_id %}
+                <a class="btn-view" href="{% url 'registrations:invoice_detail' r.invoice_id %}">View</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="muted">No registrations yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

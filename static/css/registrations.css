@@ -1,0 +1,247 @@
+:root{
+  --ink:#1a1333;
+  --muted:#7a6d99;
+  --card:#ffffff;
+  --bg:#fcf7ff;
+  --primary:#6c2bd9;      /* rich purple */
+  --primary-2:#8b5cf6;    /* softer purple */
+  --ring: rgba(108,43,217,.15);
+  --shadow: 0 14px 40px rgba(34,18,51,.10);
+}
+
+.reg-wrap{
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 16px 56px;
+  background: var(--bg);
+}
+
+.reg-card{
+  background: var(--card);
+  border: 1px solid #efe7ff;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  padding: 24px 22px;
+}
+
+.reg-card__header{
+  text-align:center;
+  margin-bottom: 18px;
+}
+.reg-card__header h1{
+  margin:0 0 6px;
+  font-size: clamp(22px, 3.2vw, 28px);
+  letter-spacing:.2px;
+  color: var(--ink);
+  font-weight: 800;
+}
+.reg-card__header h1 span{ color: var(--primary); }
+.reg-card__header .muted{
+  color: var(--muted);
+  margin:0;
+}
+
+/* Form */
+.reg-form{
+  margin-top: 8px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom: 14px;
+}
+.field label{
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 14px;
+}
+.field input,
+.field select,
+.field textarea{
+  border: 1px solid #e7dcff;
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 15px;
+  outline: none;
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color: var(--primary-2);
+  box-shadow: 0 0 0 6px var(--ring);
+}
+
+.grid-2{ display:grid; gap:14px; grid-template-columns: repeat(2,1fr); }
+.grid-3{ display:grid; gap:14px; grid-template-columns: 2fr 1fr 1fr; }
+@media (max-width:720px){
+  .grid-2, .grid-3{ grid-template-columns: 1fr; }
+}
+
+.help{ color:#c0392b; font-size:12px; }
+
+.preview{
+  margin: 8px 0 6px;
+  padding: 14px;
+  background: #faf6ff;
+  border: 1px dashed #e7dcff;
+  border-radius: 14px;
+  color: var(--ink);
+}
+
+/* Invoice inside card */
+.invoice-block{
+  margin-top: 6px;
+  padding-top: 8px;
+}
+.invoice-block .row{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0eaff;
+}
+.invoice-block .row:last-child{ border-bottom: none; }
+.invoice-block .label{ color: var(--muted); font-size: 13px; margin-bottom: 4px; }
+.invoice-block .value{ color: var(--ink); font-weight: 700; }
+.invoice-block .chip{
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.invoice-block .chip--ok{
+  background: #ecfdf5;
+  color: #0f766e;
+  border: 1px solid #bbf7d0;
+}
+.invoice-block .total .value{
+  font-size: 22px;
+  color: var(--primary);
+}
+
+/* Buttons */
+.actions{
+  display:flex; gap:10px; justify-content:center; margin-top: 14px;
+}
+.btn-primary{
+  background: var(--primary);
+  color:#fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(108,43,217,.22);
+  cursor:pointer;
+}
+.btn-primary:hover{ filter: brightness(1.05); }
+.btn-ghost{
+  background: #f7f3ff;
+  color: var(--primary);
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-decoration:none;
+  font-weight: 700;
+}
+
+/* Tiny tweak for anchor links inside card header */
+a { text-decoration: none; }
+
+
+/*registrations uodate admin view*/
+
+/* Wrapper centered */
+.reg-wrap {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 24px 20px;
+  background: #fff;
+}
+
+/* Header */
+.reg-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.reg-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.reg-sub {
+  color: #666;
+  font-size: 15px;
+}
+
+/* Stats Grid */
+.reg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.reg-card {
+  background: #f9f9fc;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.reg-metric {
+  text-align: center;
+}
+.metric-label {
+  font-size: 14px;
+  color: #777;
+}
+.metric-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 4px;
+  color: #333;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+}
+.reg-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.reg-table th, .reg-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eaeaea;
+  text-align: left;
+  font-size: 14px;
+}
+.reg-table th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #444;
+}
+.reg-table tr:hover {
+  background: #f7f9fc;
+}
+
+/* Buttons */
+.btn-view {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  background: #4a47a3;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.btn-view:hover {
+  background: #37358f;
+}
+
+/* Muted text */
+.muted {
+  color: #888;
+  font-size: 12px;
+}

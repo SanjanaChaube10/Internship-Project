@@ -347,6 +347,7 @@ def admin_event_ugc_view(request):
 
 
 # events/views.py
+# accounts/views.py
 from django.db.models import F, Value, IntegerField
 from django.db.models.functions import Coalesce
 from analytics.models import Analytics

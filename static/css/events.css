@@ -15,7 +15,7 @@
 }
 
 /* If you prefer flex instead of grid, comment the 3 lines above and use: */
-/*
+
 .events-grid{
   display: flex !important;
   flex-wrap: wrap;

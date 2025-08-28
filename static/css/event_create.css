@@ -17,8 +17,6 @@ body{
   height: 100%;
   height:700px;
  
-
-   
 }
 
 /* Title – clean, not flashy */
@@ -165,6 +163,7 @@ body{
   display: flex;
   justify-content: flex-start;
   gap: 12px;
+  height: 50px;
 }
 
 .event-card .btn {
@@ -185,4 +184,5 @@ body{
   background: #eee;
   color: #333;
   align-items: center;
+  height:50px ;
 }

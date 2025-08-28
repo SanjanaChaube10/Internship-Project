@@ -66,4 +66,4 @@ def upload_college_logo(request, college_id):
         messages.success(request, "Logo updated.")
         return redirect("colleges:college_event_portal")
 
-    return render(request, "colleges/upload_college_logo", {"college": college})
+    return render(request, "colleges/upload_college_logo.html", {"college": college})

@@ -21,7 +21,7 @@ def home_view(request):
 
 from .forms import UserSignUpForm
 
-USER_SESSION_KEY = "user_id"   # session key for user login
+USER_SESSION_KEY = "user_id"   
 
 
 # ---------- USER SIGNUP ----------
@@ -32,7 +32,7 @@ def signup_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Account created! Please log in.")
-            return redirect("login")  # url name for user login
+            return redirect("login") 
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -51,7 +51,7 @@ def login_view(request):
             messages.error(request, "Please enter both username and password.")
             return redirect("login")
 
-        # ⚠ No get(); duplicates allowed
+     
         candidates = list(UserProfile.objects.filter(username__iexact=username))
         if not candidates:
             messages.error(request, "Username not found.")
@@ -65,9 +65,9 @@ def login_view(request):
                     matched = u
                     break
             else:
-                # legacy/plain text row
+              
                 if password == stored:
-                    # upgrade to hashed immediately
+                 
                     u.password = make_password(password)
                     u.save(update_fields=["password"])
                     matched = u
@@ -76,10 +76,10 @@ def login_view(request):
         if not matched:
             messages.error(request, "Invalid username or password.")
             return redirect("login")
-# success: keep THAT user's id in session
+
         request.session[USER_SESSION_KEY] = str(getattr(matched, "user_id", matched.pk))
 
-        # optional remember me
+      
         if request.POST.get("remember"):
             request.session.set_expiry(60 * 60 * 24 * 14)  # 14 days
         else:
@@ -154,7 +154,7 @@ def dashboard_view(request):
         messages.error(request, "Session invalid. Please log in again.")
         return redirect("login")
 
-    # Try common relation names; fall back to empty lists
+   
     raw_regs = _get_related_list(user, "events_registered", "registrations", "registered_events")
     raw_up = _get_related_list(user, "uploads", "ugc", "ugc_items")
 
@@ -200,7 +200,7 @@ def logout_view(request):
     return redirect("login")
 
 
-# ----------------- ADMIN FLOWS (custom AdminProfile) -----------------
+# ----  AdminProfile) ----
 
 
 @require_http_methods(["GET", "POST"])
@@ -295,42 +295,120 @@ from events.models import Event
 from registrations.models import Registration, Payment
 
 
-def admin_dashboard(request):
-    # session guard (same style as your admin_login)
-    admin_id = request.session.get("admin_id")
+# accounts/views.py
+from decimal import Decimal
+
+from django.contrib import messages
+from django.db.models import Sum, Q
+from django.db.models.functions import Coalesce
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_GET
+
+from accounts.models import AdminProfile
+from events.models import Event
+from registrations.models import Registration, Payment
+
+
+# --- small helper to get the logged-in admin from session ---
+ADMIN_SESSION_KEY = "admin_id"
+
+def _current_admin(request):
+    admin_id = request.session.get(ADMIN_SESSION_KEY)
     if not admin_id:
+        return None
+    return AdminProfile.objects.filter(admin_id=admin_id).first()
+
+
+@require_GET
+def admin_dashboard(request):
+    """
+    Admin dashboard showing totals for this admin's college only.
+    Totals:
+      - total_events
+      - total_registrations
+      - total_payments (₹ of PAID payments)
+      - total_sponsored (if Event has is_sponsored; else 0)
+    """
+    admin = _current_admin(request)
+    if not admin:
+        messages.error(request, "Please log in as admin.")
         return redirect("admin_login")
 
-    try:
-        admin = AdminProfile.objects.get(admin_id=admin_id)
-    except AdminProfile.DoesNotExist:
-        messages.error(request, "Session invalid. Please log in again.")
-        return redirect("admin_login")
+    college = getattr(admin, "college", None)
 
-    # --- metrics (GLOBAL) ---
-    total_events = Event.objects.count()
-    total_registrations = Registration.objects.count()
+    # Default zeroed metrics if no college is linked yet
+    stats = {
+        "total_events": 0,
+        "total_registrations": 0,
+        "total_payments": Decimal("0.00"),
+        "total_sponsored": 0,
+    }
 
-    # IMPORTANT: aggregate on real Payment fields (no registrations__… here)
-    total_payments = (
-        Payment.objects.aggregate(total=Sum("amount")).get("total") or 0
-    )
+    rows = []
 
-    # If your Event has no 'is_sponsored' field, this will just be 0
-    try:
-        total_sponsored = Event.objects.filter(is_sponsored=True).count()
-    except Exception:
-        total_sponsored = 0
+    if college:
+        # ---- Totals, all scoped to this college ----
+        stats["total_events"] = Event.objects.filter(college=college).count()
+
+        stats["total_registrations"] = Registration.objects.filter(
+            event__college=college
+        ).count()
+
+        stats["total_payments"] = (
+            Payment.objects.filter(
+                invoice__registration__event__college=college,
+                status__iexact="paid",
+            )
+            .aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")))
+            .get("total")
+            or Decimal("0.00")
+        )
+
+        # Optional: only if your Event model actually has is_sponsored
+        try:
+            stats["total_sponsored"] = Event.objects.filter(
+                college=college, is_sponsored=True
+            ).count()
+        except Exception:
+            stats["total_sponsored"] = 0
+
+        # ---- Detailed table rows (if you show them on the dashboard) ----
+        regs = (
+            Registration.objects.filter(event__college=college)
+            .select_related("user", "event", "invoice", "invoice__payment")
+            .order_by("-registration_date", "-event__date_time")
+        )
+
+        for r in regs:
+            inv = getattr(r, "invoice", None)
+            pay = getattr(inv, "payment", None)
+            rows.append(
+                {
+                    "reg_id": r.registration_id,
+                    "date": r.registration_date,
+                    "user": r.user,  # use .username / .email in template
+                    "event_id": r.event.event_id,
+                    "event_title": r.event.title,
+                    "status": r.payment_status,
+                    "invoice_id": getattr(inv, "invoice_id", None),
+                    "pay_status": getattr(pay, "status", ""),
+                    "gateway": getattr(pay, "gateway", ""),
+                    "amount": getattr(pay, "amount", Decimal("0.00")),
+                }
+            )
+
+    else:
+        messages.info(
+            request,
+            "No college is linked to your admin account yet. "
+            "Once a college is linked, your metrics will appear here.",
+        )
 
     context = {
         "admin": admin,
-        "college": getattr(admin, "college", None),
-        "stats": {
-            "total_events": total_events,
-            "total_registrations": total_registrations,
-            "total_payments": total_payments,
-            "total_sponsored": total_sponsored,
-        },
+        "college": college,
+        "stats": stats,
+        "rows": rows,  # only if you render a table of recent registrations
     }
     return render(request, "accounts/admin_dashboard.html", context)
                   

@@ -27,7 +27,7 @@
         </div>
 
         <h2 class="college-name">
-          <a href="{% url 'events:events_by_college' college_id=col.college_id %}">{{ col.name }}</a>
+          <a href="{% url 'colleges:college_detail' college_id=col.college_id %}">{{ col.name }}</a>
         </h2>
         <p class="college-location">{{ col.location }}</p>
       </div>
